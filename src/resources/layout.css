@@ -1,0 +1,59 @@
+.layout-parent{
+    display:flex;
+    height: 90vh;
+    width: 100%;
+    
+    background-color: white;
+    overflow-y: hidden;
+}
+.header{
+    background-color:rgb(190, 9, 69);
+    height: 70px;
+    border-bottom: 1px solid white;
+}
+
+.sidebar{
+    
+    background-color:rgb(190, 9, 69);
+    display: flex;
+    
+    justify-content: center;
+    padding: 0 20px;
+}
+.content{
+    padding: 10px;
+    
+}
+.menu-item{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    transition: 0.2s;
+    gap:15px;
+    
+}
+.menu-item i{
+    font-size: 20px;
+    margin-right: 10px;
+    
+    
+    
+    
+}
+.menu-item span{
+    font-size: 18px;
+    
+}
+
+.active-menu-item{
+    border:2px solid white;
+    border-radius: 5px;
+}
+i{
+    cursor: pointer;
+    font-size: 25px;
+    
+}
