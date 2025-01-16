@@ -1,52 +1,76 @@
-import { Col, Form, Modal, Row } from 'antd'
-import { message } from 'antd';
+import { Col, Form, message, Modal, Row } from 'antd'
+
 
 import React from 'react'
 import { useDispatch } from 'react-redux';
 import api from '../services/commonAPI';
 import {ShowLoading, HideLoading} from '../Redux/alertSlice'
-import moment from 'moment';
 
-function BusForm({showBusForm,setShowBusForm, type='add'}) {
+
+
+
+
+function BusForm({showBusForm,setShowBusForm, type='add', getData, selectedBus, setSelectedBus}) {
   const dispatch=useDispatch();
-  const onFinish=async(values)=>{
-    try{
-      dispatch(ShowLoading())
+  
 
+  const onFinish= async(values)=>{
+    console.log("Form Values:", values);
+    try{
+
+      dispatch(ShowLoading())
       let response=null;
       if(type==='add'){
-        response=await api.post('/api/buses/add-bus', {
-          ...values,
-          journeyDate:moment(values.journeyDate).format('DD-MM-YYYY')
-        })
+        response= await api.post("/api/buses/add-bus", values)
+
 
       }else{
+        response= await api.post("/api/buses/update-bus", {...values, _id:selectedBus._id})
 
       }
 
+
       if(response.data.success){
         message.success(response.data.message)
+
       }else{
         message.error(response.data.message)
 
       }
-
+      getData()
+      setShowBusForm(false)
+      setSelectedBus(null)
       dispatch(HideLoading())
 
+
     }catch(error){
+
       message.error(error.message)
       dispatch(HideLoading())
 
+
+
     }
+
+
+
+
   }
+
+      
 
 
 
   return (
     <>
-    <Modal  width={"800px"} title="Add Bus"  open={showBusForm} onCancel={() => setShowBusForm(false)} footer={false}  >
+    <Modal  width={"800px"} title={type==="add"?"Add Bus": "Update Bus Details"}  open={showBusForm}
+     onCancel={() => {
+      setSelectedBus(null)
+      setShowBusForm(false)
 
-      <Form layout='vertical' onFinish={onFinish}>
+    }} footer={false}  >
+
+      <Form layout='vertical' onFinish={onFinish} initialValues={selectedBus}   >
         <Row gutter={[10,10]}>
           <Col lg={24} xs={24}>
           <Form.Item label="Bus Name" name="name">
@@ -99,7 +123,7 @@ function BusForm({showBusForm,setShowBusForm, type='add'}) {
 
 
         <Col lg={12} xs={24}>
-          <Form.Item label="Type" name="type">
+          <Form.Item label="Type" name="type" rules={[{ required: true, message: 'Type is required' }]}>
             <input type="text" className='form-control'/>
           </Form.Item>
         </Col>
