@@ -57,3 +57,11 @@ h1,p{
     padding-bottom: 0 !important;
 
 }
+
+.disabled-button{
+    background-color: grey !important;
+    color: white;
+    border: none !important;
+    padding: 10px 20px;
+    cursor: not-allowed;
+}
