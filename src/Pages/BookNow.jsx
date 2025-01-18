@@ -7,10 +7,13 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Col, message, Row } from 'antd'
 import SeatSelection from '../Components/SeatSelection'
+import { useSelector } from 'react-redux'
 
 function BookNow() {
 const dispatch=useDispatch()
 const[bus, setBus]= useState(null)
+const{user}=useSelector(state=>state.users)
+
 const params=useParams()
 const[selectedSeats, setSelectedSeats]=useState([])
 
@@ -63,6 +66,61 @@ const bookNow=async()=>{
 }
 
 
+// Handle Razorpay payment
+const handleRegister = async () => {
+    const totalAmount = bus.fare * selectedSeats.length;
+
+    try {
+        dispatch(ShowLoading());
+        const orderResponse = await api.post('/api/payment/create-order', { amount: totalAmount });
+        dispatch(HideLoading());
+
+        if (orderResponse.data.success) {
+            const { order } = orderResponse.data;
+
+            const options = {
+                key: "rzp_test_iBqySrSexqQTOR", 
+                amount: order.amount,
+                currency: order.currency,
+                name: "Easy Bus",
+                description: `Bus booking for ${bus.name}`,
+                order_id: order.id,
+                handler: async (response) => {
+                    const verifyResponse = await api.post('/api/payment/verify-payment', {
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature,
+                        bus: bus._id,
+                        user: user?._id, 
+                        seats: selectedSeats,
+                        amount: totalAmount,
+                    });
+
+                    if (verifyResponse.data.success) {
+                        message.success("Payment successful! Booking confirmed.");
+                        console.log("verify succes");
+                        bookNow()
+                        
+                    } else {
+                        message.error("Payment verification failed.");
+                    }
+                },
+                theme: {
+                    color: "#3399cc",
+                },
+            };
+
+            const razorpay = new window.Razorpay(options);
+            razorpay.open();
+        } else {
+            message.error(orderResponse.data.message);
+        }
+    } catch (error) {
+        dispatch(HideLoading());
+        message.error(error.message);
+    }
+};
+
 
 
  useEffect(()=>{
@@ -96,7 +154,7 @@ const bookNow=async()=>{
             <h1>Total Amount : ${bus.fare * selectedSeats.length}</h1>
            </div>
 
-           <button className={`btn btn-primary mt-3 ${selectedSeats.length===0 && "disabled-button"}`} onClick={bookNow} disabled={selectedSeats.length===0}>Book Now</button>
+           <button className={`btn btn-primary mt-3 ${selectedSeats.length===0 && "disabled-button"}`} onClick={handleRegister} disabled={selectedSeats.length===0}>Book Now</button>
 
 
             </Col>

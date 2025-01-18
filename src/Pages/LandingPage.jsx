@@ -29,7 +29,7 @@ function LandingPage() {
         
       }catch(error){
         dispatch(HideLoading())
-        message.error( error.message)
+        //message.error( error.message)
   
       }
   }

@@ -21,7 +21,7 @@ function Login() {
             dispatch(HideLoading())
             
             if (response.data.success) {
-              toast.success(response.data.message);
+              message.success("Logged in successfully");
               
               sessionStorage.setItem("token",response.data.data)
               navigate('/')

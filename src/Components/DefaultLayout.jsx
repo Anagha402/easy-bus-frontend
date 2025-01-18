@@ -62,7 +62,11 @@ function DefaultLayout({children}) {
     ]
     const menuToBeRendered=user?.isAdmin? adminMenu:userMenu;
     const location = useLocation();
-    const activeRoute = location.pathname;
+    let activeRoute = location.pathname;
+    if(location.pathname.includes("/book-now")){
+        activeRoute="/"
+
+    }
   return (
     <>
     <div className="header text-light d-flex">

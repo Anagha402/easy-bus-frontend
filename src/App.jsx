@@ -14,6 +14,7 @@ import AdminHome from './Pages/Admin/AdminHome'
 import AdminBuses from './Pages/Admin/AdminBuses'
 import AdminUsers from './Pages/Admin/AdminUsers'
 import BookNow from './Pages/BookNow'
+import Bookings from './Pages/Bookings'
 
 function App() {
   const{loading}=useSelector(state=>state.alerts)
@@ -30,6 +31,7 @@ function App() {
         <Route path="/admin/buses" element={<ProtectedRoute><AdminBuses/></ProtectedRoute>}/>
         <Route path="/admin/users" element={<ProtectedRoute><AdminUsers/></ProtectedRoute>}/>
         <Route path="/book-now/:id" element={<ProtectedRoute><BookNow/></ProtectedRoute>}/>
+        <Route path="/bookings" element={<ProtectedRoute><Bookings/></ProtectedRoute>}/>
       </Routes>
     </>
   )
