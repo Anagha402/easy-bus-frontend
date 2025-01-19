@@ -1,50 +1,45 @@
-import { Col, Row } from 'antd'
-import React from 'react'
-import '../resources/bus.css'
+import React from "react";
+import { Row, Col } from "antd";
+import "../resources/bus.css";
 
-function SeatSelection({selectedSeats, setSelectedSeats, bus}) {
+function SeatSelection({ selectedSeats, setSelectedSeats, bus }) {
+    const capacity = parseInt(bus.capacity);
 
-const capacity=parseInt(bus.capacity)
+    const selectOrUnSelectSeats = (seatNumber) => {
+        if (selectedSeats.includes(seatNumber)) {
+            setSelectedSeats(selectedSeats.filter((seat) => seat !== seatNumber));
+        } else {
+            setSelectedSeats([...selectedSeats, seatNumber]);
+        }
+    };
 
-const selectOrUnSelectSeats=(seatnumber)=>{
-    if(selectedSeats.includes(seatnumber)){
-        setSelectedSeats(selectedSeats.filter((seat)=>seat !== seatnumber))
-        
-    }else{
-        setSelectedSeats([...selectedSeats, seatnumber])
+    return (
+        <div className="bus-container">
+            <Row gutter={[10, 10]}>
+                {Array.from(Array(capacity).keys()).map((seat) => {
+                    const seatNumber = seat + 1;
+                    let seatClass = "";
 
-    }
-}
-  return (
-    <>
-    <div className="bus-container">
-        <Row gutter={[10,10]}>
-            {Array.from(Array(capacity).keys()).map((seat)=>{
-                let seatClass=''
-                if(selectedSeats.includes(seat+1)){
-                    seatClass='selected-seat'
-                }else if(bus.seatsBooked.includes(seat+1)){
-                    seatClass="booked-seat"
-                }
-            
-                   
-                    return(
-                        <Col span={6}>
-                        <div className={`seat ${seatClass}`} onClick={()=>selectOrUnSelectSeats(seat+1)}>
-                            {seat + 1}
-                        </div>
-                    </Col>);
-                    
-                   
-                
-})}
-        </Row>
+                    if (selectedSeats.includes(seatNumber)) {
+                        seatClass = "selected-seat";
+                    } else if (bus.seatsBooked.includes(seatNumber)) {
+                        seatClass = "booked-seat";
+                    }
 
-
-    </div>
-      
-    </>
-  )
+                    return (
+                        <Col span={6} key={seatNumber}>
+                            <div
+                                className={`seat ${seatClass}`}
+                                onClick={() => selectOrUnSelectSeats(seatNumber)}
+                            >
+                                {seatNumber}
+                            </div>
+                        </Col>
+                    );
+                })}
+            </Row>
+        </div>
+    );
 }
 
-export default SeatSelection
+export default SeatSelection;

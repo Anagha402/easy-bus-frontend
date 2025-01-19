@@ -9,6 +9,8 @@ import {ShowLoading, HideLoading} from '../Redux/alertSlice'
 
 
 
+
+
 function Login() {
     const navigate=useNavigate()
     const dispatch=useDispatch()
@@ -22,8 +24,11 @@ function Login() {
             
             if (response.data.success) {
               message.success("Logged in successfully");
-              
               sessionStorage.setItem("token",response.data.data)
+
+              
+
+
               navigate('/')
             } else {
               toast.warning(response.data.message);
