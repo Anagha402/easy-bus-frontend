@@ -14,7 +14,7 @@ function SeatSelection({ selectedSeats, setSelectedSeats, bus }) {
     };
 
     return (
-        <div className="bus-container">
+        <div className="bus-container p-3 mt-5 mx-5 " >
             <Row gutter={[10, 10]}>
                 {Array.from(Array(capacity).keys()).map((seat) => {
                     const seatNumber = seat + 1;

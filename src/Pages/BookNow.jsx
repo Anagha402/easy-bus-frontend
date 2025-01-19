@@ -105,7 +105,7 @@ function BookNow() {
         <>
             {bus && (
                 <Row style={{ height: "90vh", width: "1320px", backgroundColor: "white" }}>
-                    <Col lg={12} xs={24} sm={24}>
+                    <Col lg={12} xs={24} sm={24} className="p-4">
                         <h1 style={{ color: "rgb(190, 9, 69)" }} className="text-xxl fw-bolder">
                             {bus.name}
                         </h1>
