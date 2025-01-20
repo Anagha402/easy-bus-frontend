@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import '../resources/layout.css'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 
 import { useSelector } from 'react-redux'
@@ -36,11 +36,11 @@ function DefaultLayout({children}) {
     const adminMenu=[
         {
             name:'Home',
-            path:'/admin',
+            path:'/',
             icon:<i class="fa-solid fa-house"></i>
         },
         {
-            name:'Buses',
+            name:'Buses ',
             path:'/admin/buses',
             icon:<i class="fa-solid fa-bus"></i>
         },
@@ -53,6 +53,11 @@ function DefaultLayout({children}) {
             name:'Bookings',
             path:'/admin/bookings',
             icon:<i class="fa-solid fa-list"></i>
+        },
+        {
+            name:'Dashboard',
+            path:'/admin/dashboard',
+            icon:<i class="fa-solid fa-chart-line"></i>
         },
         {
             name:'Logout',
@@ -70,8 +75,8 @@ function DefaultLayout({children}) {
   return (
     <>
     <div className="header text-light d-flex">
-            {collapsed? <i onClick={()=>setCollapsed(!collapsed)} class="fa-solid fa-xmark p-3"></i>: <i onClick={()=>setCollapsed(!collapsed)} class="fa-solid fa-bars p-3"></i>}
-           <h1 className='mt-2'>EasyBus</h1>
+            {collapsed? <i onClick={()=>setCollapsed(!collapsed)} class="fa-solid fa-bars p-3"></i>: <i onClick={()=>setCollapsed(!collapsed)} class="fa-solid fa-bars p-3"></i>}
+           <h1 onClick={()=> navigate("/")} style={{cursor:"pointer"}} className='mt-2'>EasyBus</h1>
             
              <h3 className='role mt-3' style={{marginLeft:"400px"}}>Welcome {user?.name}  <span style={{fontSize:"18px",marginLeft:"70px"}}>Role:  {user?.isAdmin?'Admin':'User'}  </span> </h3>
         </div>

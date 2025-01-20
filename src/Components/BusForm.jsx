@@ -112,25 +112,41 @@ function BusForm({showBusForm,setShowBusForm, type='add', getData, selectedBus, 
 
         <Col lg={8} xs={24}>
           <Form.Item label="Departure Time" name="departure">
-            <input type="text" className='form-control'/>
+            <input type="time" className='form-control'/>
           </Form.Item>
         </Col>
         <Col lg={8} xs={24}>
           <Form.Item label="Arrival Time" name="arrival">
-            <input type="text" className='form-control'/>
+            <input type="time" className='form-control'/>
           </Form.Item>
         </Col>
 
 
         <Col lg={12} xs={24}>
-          <Form.Item label="Type" name="type" rules={[{ required: true, message: 'Type is required' }]}>
-            <input type="text" className='form-control'/>
+          <Form.Item label="Type" name="type" >
+          <select name="" id=""className='form-control'>
+          <option value="Non-AC">Non-AC</option>
+              <option value="AC">AC</option>
+              
+              <option value="Super Deluxe">Super Deluxe</option>
+            </select>
           </Form.Item>
         </Col>
 
         <Col lg={12} xs={24}>
           <Form.Item label="Fare" name="fare">
             <input type="text" className='form-control'/>
+          </Form.Item>
+        </Col>
+
+        <Col lg={12} xs={24}>
+          <Form.Item label="Status" name="status">
+          <select name="" id=""className='form-control'>
+          <option value="Completed">Completed</option>
+              <option value="Yet To Start">Yet To Start</option>
+              <option value="Running">Running</option>
+              
+            </select>
           </Form.Item>
         </Col>
         </Row>

@@ -5,7 +5,7 @@ function Bus({bus}) {
   return (
     <>
 
-    <div className="card p-2 ">
+    <div className="card p-3 ">
     <h1 className='text-xl fw-bolder text-dark'>{bus.name}</h1>
         <hr />
 

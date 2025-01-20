@@ -27,7 +27,7 @@ function App() {
         <Route path="/" element={<ProtectedRoute><LandingPage/></ProtectedRoute>}/>
         <Route path="/register" element={<PublicRoute><Register/></PublicRoute>}/>
         <Route path="/login" element={<PublicRoute><Login/></PublicRoute>}/>
-        <Route path="/admin" element={<ProtectedRoute><AdminHome/></ProtectedRoute>}/>
+        
         <Route path="/admin/buses" element={<ProtectedRoute><AdminBuses/></ProtectedRoute>}/>
         <Route path="/admin/users" element={<ProtectedRoute><AdminUsers/></ProtectedRoute>}/>
         <Route path="/book-now/:id" element={<ProtectedRoute><BookNow/></ProtectedRoute>}/>

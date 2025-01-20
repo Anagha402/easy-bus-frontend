@@ -66,9 +66,9 @@ function Login() {
 
     
           <div className="d-flex justify-content-between">
-            <p>Click here to <Link  to={'/register'} className='text-decoration-none text-success'> Register</Link> </p>
+            <p className='mt-3'>Click here to <Link  to={'/register'} className='text-decoration-none text-success'> Register</Link> </p>
             
-          <button className='btn btn-primary' type="submit">Login</button>
+          <button className='btn btn-primary m-3' type="submit">Login</button>
 
           </div>
     

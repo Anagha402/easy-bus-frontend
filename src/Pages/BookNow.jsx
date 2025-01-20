@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Col, message, Row } from "antd";
 import { ShowLoading, HideLoading } from "../Redux/alertSlice";
 import api from "../services/commonAPI";
@@ -11,6 +11,7 @@ function BookNow() {
     const [bus, setBus] = useState(null);
     const { user } = useSelector((state) => state.users);
     const params = useParams();
+    const navigate=useNavigate()
     const [selectedSeats, setSelectedSeats] = useState([]);
 
     // Fetch bus details
@@ -70,6 +71,7 @@ function BookNow() {
                               setBus(updatedBusResponse.data.data);
                               setSelectedSeats([]);
                               message.success("Payment successful! Booking confirmed.");
+                              navigate("/bookings")
                           } else {
                               message.error("Failed to fetch updated bus details.");
                           }
@@ -118,13 +120,13 @@ function BookNow() {
                             <h3>Arrival Time: {bus.arrival}</h3>
                             <h3>Total Seats: {bus.capacity}</h3>
                             <h3>Seats Left: {bus.capacity - bus.seatsBooked.length}</h3>
-                            <h3>Price: ${bus.fare}</h3>
+                            <h3>Price: &#8377;{bus.fare}</h3>
                         </div>
                         <hr />
 
                         <div className="d-flex flex-column gap-1">
                             <h4 className="text-2xl">Selected Seats: {selectedSeats.join(", ")}</h4>
-                            <h1>Total Amount: ${bus.fare * selectedSeats.length}</h1>
+                            <h1>Total Amount: &#8377;{bus.fare * selectedSeats.length}</h1>
                         </div>
 
                         <button
