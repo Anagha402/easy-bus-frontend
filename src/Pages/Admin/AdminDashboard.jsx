@@ -20,32 +20,64 @@ const AdminDashboard = () => {
   // Function to fetch the data
   const fetchData = async () => {
     try {
+      // Show loading indicator
       dispatch(ShowLoading());
-
-      // Send the selected date to the backend
-      const formattedDate = moment(selectedDate).format('YYYY-MM-DD'); // Ensure correct format
+  
+      // Format the selected date before sending to the backend
+      const formattedDate = moment(selectedDate).startOf('day').format('YYYY-MM-DD');
+console.log('Sending Date to Backend:', formattedDate);
+  
+      // Make API request
       const revenueResponse = await api.post('/api/bookings/get-bookings-by-date', { date: formattedDate });
-
+  
+      // Hide loading indicator after the request completes
       dispatch(HideLoading());
-
+  
+      // Log the API response to check the data
+      console.log('API Response:', revenueResponse.data);
+  
+      // Check if the response indicates success
       if (revenueResponse.data.success) {
+        // Update state with the response data
         setTotalRevenue(revenueResponse.data.data.totalRevenue);
         setBookingsStats(revenueResponse.data.data.busData);
         setRevenueStats(revenueResponse.data.data.busData);
       } else {
+        // Show error message if the API response is not successful
         message.error('Failed to fetch booking data');
       }
     } catch (error) {
+      // Hide loading indicator in case of error
       dispatch(HideLoading());
-      message.error('An error occurred while fetching data.');
+  
+      // Check and log detailed error message
+      if (error.response) {
+        // Log response error (useful for API errors)
+        console.error('Error fetching data from API:', error.response.data);
+        message.error(`Error: ${error.response.data.message || 'An error occurred'}`);
+      } else {
+        // Log general error (useful for network or other issues)
+        console.error('Error fetching data:', error.message);
+        message.error('An error occurred while fetching data.');
+      }
     }
   };
+  
+  
+  
 
   // Handle date change
   const handleDateChange = (date, dateString) => {
-    setSelectedDate(dateString); // Set the selected date
+    if (date) {
+      console.log('Selected Date:', dateString);
+      setSelectedDate(dateString);
+    } else {
+      console.error('Invalid date selected');
+    }
   };
-
+  
+  
+  
   useEffect(() => {
     fetchData(); // Fetch data when the component mounts or when the selected date changes
   }, [selectedDate]);

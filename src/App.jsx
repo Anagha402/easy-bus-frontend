@@ -10,11 +10,13 @@ import ProtectedRoute from './Components/ProtectedRoute'
 import LandingPage from './Pages/LandingPage'
 import Loader from './Components/Loader'
 import { useSelector } from 'react-redux'
-import AdminHome from './Pages/Admin/AdminHome'
+
 import AdminBuses from './Pages/Admin/AdminBuses'
 import AdminUsers from './Pages/Admin/AdminUsers'
 import BookNow from './Pages/BookNow'
 import Bookings from './Pages/Bookings'
+import AdminDashboard from './Pages/Admin/AdminDashboard'
+import AdminBookings from './Pages/Admin/AdminBookings'
 
 function App() {
   const{loading}=useSelector(state=>state.alerts)
@@ -32,6 +34,8 @@ function App() {
         <Route path="/admin/users" element={<ProtectedRoute><AdminUsers/></ProtectedRoute>}/>
         <Route path="/book-now/:id" element={<ProtectedRoute><BookNow/></ProtectedRoute>}/>
         <Route path="/bookings" element={<ProtectedRoute><Bookings/></ProtectedRoute>}/>
+        <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard/></ProtectedRoute>}/>
+        <Route path="/admin/bookings" element={<ProtectedRoute><AdminBookings/></ProtectedRoute>}/>
       </Routes>
     </>
   )

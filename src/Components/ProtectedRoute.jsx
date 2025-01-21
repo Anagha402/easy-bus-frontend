@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import {ShowLoading, HideLoading} from '../Redux/alertSlice'
 import DefaultLayout from './DefaultLayout';
+import { message } from 'antd';
 
 function ProtectedRoute({children}) {
   const dispatch=useDispatch()
@@ -27,6 +28,7 @@ function ProtectedRoute({children}) {
 
       if(response.data.success){
         
+        
         dispatch(SetUser(response.data.data))
       }else{
         
@@ -39,6 +41,7 @@ function ProtectedRoute({children}) {
     }catch(error){
       dispatch(HideLoading())
       sessionStorage.removeItem('token')
+      
       toast.warning(response.data.message)
       
       navigate('/home')

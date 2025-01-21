@@ -25,11 +25,12 @@ function Login() {
             if (response.data.success) {
               message.success("Logged in successfully");
               sessionStorage.setItem("token",response.data.data)
+              window.location.href="/"
 
               
 
 
-              navigate('/')
+              //navigate('/')
             } else {
               toast.warning(response.data.message);
             }
