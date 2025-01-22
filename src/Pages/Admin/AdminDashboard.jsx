@@ -1,159 +1,120 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, message, Button } from 'antd';
+import { Calendar, Card, message } from 'antd';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
 import { useDispatch } from 'react-redux';
 import { ShowLoading, HideLoading } from '../../Redux/alertSlice';
 import api from '../../services/commonAPI';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { PieChart, Pie, Cell, ResponsiveContainer as PieResponsiveContainer } from 'recharts';
-import { DatePicker } from 'antd';
-import moment from 'moment';
+import PageTitle from '../../Components/PageTitle';
 
-const { RangePicker } = DatePicker;
-
-const AdminDashboard = () => {
+function AdminBookingsPage () {
   const dispatch = useDispatch();
-  const [totalRevenue, setTotalRevenue] = useState(0);
-  const [bookingsStats, setBookingsStats] = useState([]);
-  const [revenueStats, setRevenueStats] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD')); // Default to today
+  const [totalRevenue, setTotalRevenue] = useState(0);  // State to hold total revenue
+  const [revenueData, setRevenueData] = useState([]); // State to hold revenue data for the selected date
+  const [selectedDate, setSelectedDate] = useState(null);  // State for selected date
 
-  // Function to fetch the data
+  // Fetch total revenue across all bookings
   const fetchData = async () => {
     try {
-      // Show loading indicator
       dispatch(ShowLoading());
-  
-      // Format the selected date before sending to the backend
-      const formattedDate = moment(selectedDate).startOf('day').format('YYYY-MM-DD');
-console.log('Sending Date to Backend:', formattedDate);
-  
-      // Make API request
-      const revenueResponse = await api.post('/api/bookings/get-bookings-by-date', { date: formattedDate });
-  
-      // Hide loading indicator after the request completes
+      const bookingsResponse = await api.post('/api/bookings/get-all-bookings');
       dispatch(HideLoading());
-  
-      // Log the API response to check the data
-      console.log('API Response:', revenueResponse.data);
-  
-      // Check if the response indicates success
-      if (revenueResponse.data.success) {
-        // Update state with the response data
-        setTotalRevenue(revenueResponse.data.data.totalRevenue);
-        setBookingsStats(revenueResponse.data.data.busData);
-        setRevenueStats(revenueResponse.data.data.busData);
+      if (bookingsResponse.data.success) {
+        setTotalRevenue(bookingsResponse.data.totalRevenue); // Set total revenue
       } else {
-        // Show error message if the API response is not successful
-        message.error('Failed to fetch booking data');
+        message.error(bookingsResponse.data.message);
       }
     } catch (error) {
-      // Hide loading indicator in case of error
       dispatch(HideLoading());
-  
-      // Check and log detailed error message
-      if (error.response) {
-        // Log response error (useful for API errors)
-        console.error('Error fetching data from API:', error.response.data);
-        message.error(`Error: ${error.response.data.message || 'An error occurred'}`);
-      } else {
-        // Log general error (useful for network or other issues)
-        console.error('Error fetching data:', error.message);
-        message.error('An error occurred while fetching data.');
-      }
+      message.error('An error occurred while fetching total revenue.');
     }
   };
-  
-  
-  
 
-  // Handle date change
-  const handleDateChange = (date, dateString) => {
-    if (date) {
-      console.log('Selected Date:', dateString);
-      setSelectedDate(dateString);
-    } else {
-      console.error('Invalid date selected');
+  // Fetch revenue data based on the selected date
+  const fetchRevenueDataByDate = async (date) => {
+    try {
+      dispatch(ShowLoading());
+      const response = await api.post('/api/bookings/get-revenue-by-date', { date });
+      dispatch(HideLoading());
+      if (response.data.success) {
+        const formattedData = Object.keys(response.data.data).map((busName) => ({
+          busName,
+          revenue: response.data.data[busName],
+        }));
+        setRevenueData(formattedData);
+      } else {
+        message.error(response.data.message);
+      }
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error('An error occurred while fetching revenue data for the selected date.');
     }
   };
-  
-  
-  
+
+  // Handle date change from calendar
+  const handleDateChange = (date) => {
+    const formattedDate = date.format('YYYY-MM-DD');
+    setSelectedDate(formattedDate);
+    fetchRevenueDataByDate(formattedDate);
+  };
+
   useEffect(() => {
-    fetchData(); // Fetch data when the component mounts or when the selected date changes
-  }, [selectedDate]);
+    fetchData();
+    const today = new Date();
+    const formattedToday = today.toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    setSelectedDate(formattedToday);
+    fetchRevenueDataByDate(formattedToday); // Fetch revenue data for today's date
+  }, []);
 
   return (
-    <div style={{ width: '1280px', height: '640px', padding: '20px' }}>
+    <>
+    <div style={{ width: '1320px', height: '640px', padding: '20px' }}>
       {/* Page Title */}
-      <h2 style={{ marginBottom: '20px', fontWeight: 'bold', textAlign: 'center' }}>Admin Dashboard</h2>
+      <PageTitle title="Admin Dashboard" />
 
-      {/* Date Picker */}
-      <Row justify="center" style={{ marginBottom: '20px' }}>
-        <Col>
-          <DatePicker
-            defaultValue={moment(selectedDate, 'YYYY-MM-DD')} // Ensure correct formatting
-            format="YYYY-MM-DD"
-            onChange={handleDateChange}
-          />
-        </Col>
-      </Row>
+      {/* Total Revenue Box */}
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+        <Card title="Total Revenue" bordered={false} style={{ width: 300, textAlign: 'center' }}>
+          <h2 style={{ fontSize: '36px', margin: 0 }}>₹{totalRevenue.toFixed(2)}</h2>
+        </Card>
+      </div>
 
-      {/* Cards for total revenue */}
-      <Row gutter={16} justify="space-around" style={{ marginBottom: '20px' }}>
-        <Col span={8}>
-          <Card title="Total Revenue" bordered={false} style={{ height: '100%' }}>
-            <h2 style={{ fontSize: '32px', textAlign: 'center', color: '#ff6f61' }}>
-              ₹{totalRevenue ? totalRevenue.toLocaleString() : '0'}
-            </h2>
-          </Card>
-        </Col>
-      </Row>
+      {/* Main Section: Calendar and Bar Chart */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        {/* Calendar */}
+        <Card style={{ width: '30%' }}>
+          <h3>Select a Date</h3>
+          <Calendar fullscreen={false} onSelect={handleDateChange} />
+        </Card>
 
-      {/* Charts Section */}
-      <Row gutter={16} style={{ height: '480px' }}>
-        {/* Bookings by bus chart */}
-        <Col span={12} style={{ height: '100%' }}>
-          <Card title="Bookings per Bus" bordered={false} style={{ height: '100%' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={bookingsStats}>
+        {/* Bar Chart */}
+        <Card style={{ width: '65%', textAlign: 'center' }}>
+          <h3>Revenue by Bus on {selectedDate || "Selected Date"}</h3>
+          {revenueData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart
+                data={revenueData}
+                layout="vertical"
+                margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="busName" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="bookings" stroke="#8884d8" />
-              </LineChart>
+                <XAxis type="number" tickFormatter={(value) => `₹${value}`} />
+                <YAxis type="category" dataKey="busName" />
+                <Tooltip formatter={(value) => `₹${value}`} />
+                <Bar dataKey="revenue" fill="#1890ff" barSize={30}>
+                  {/* Display revenue on the bars */}
+                  <LabelList dataKey="revenue" position="insideRight" formatter={(value) => `₹${value}`} />
+                </Bar>
+              </BarChart>
             </ResponsiveContainer>
-          </Card>
-        </Col>
-
-        {/* Revenue per bus pie chart */}
-        <Col span={12} style={{ height: '100%' }}>
-          <Card title="Revenue per Bus" bordered={false} style={{ height: '100%' }}>
-            <PieResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={revenueStats}
-                  dataKey="revenue"
-                  nameKey="busName"
-                  outerRadius={120}
-                  fill="#82ca9d"
-                  label
-                >
-                  {revenueStats.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={['#0088FE', '#00C49F', '#FFBB28', '#FF8042'][index % 4]}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
-            </PieResponsiveContainer>
-          </Card>
-        </Col>
-      </Row>
+          ) : (
+            <p>No data available for the selected date.</p>
+          )}
+        </Card>
+      </div>
     </div>
+
+    </>
   );
 };
 
-export default AdminDashboard; 
+export default AdminBookingsPage;

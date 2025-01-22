@@ -88,8 +88,14 @@ const AdminBookingsPage = () => {
       key: 'createdAt',
       render: (date) => new Date(date).toLocaleDateString(),
     },
-   
+    {
+      title: 'Total Amount',
+      dataIndex: 'totalAmount',
+      key: 'totalAmount',
+      render: (amount) => `₹${amount.toFixed(2)}`, // Display the amount in INR format
+    },
   ];
+  
 
   useEffect(() => {
     fetchData();
