@@ -121,7 +121,12 @@ function Bookings() {
 
   return (
     <>
-      <PageTitle title="Bookings" />
+    <div className="d-flex">
+    <PageTitle title="Bookings" />
+    
+    </div>
+     
+
       <Table
         className="border shadow-lg"
         dataSource={bookings}

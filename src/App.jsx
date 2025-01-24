@@ -18,6 +18,7 @@ import Bookings from './Pages/Bookings'
 import AdminDashboard from './Pages/Admin/AdminDashboard'
 import AdminBookings from './Pages/Admin/AdminBookings'
 
+
 function App() {
   const{loading}=useSelector(state=>state.alerts)
  
@@ -36,6 +37,7 @@ function App() {
         <Route path="/bookings" element={<ProtectedRoute><Bookings/></ProtectedRoute>}/>
         <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard/></ProtectedRoute>}/>
         <Route path="/admin/bookings" element={<ProtectedRoute><AdminBookings/></ProtectedRoute>}/>
+        
       </Routes>
     </>
   )

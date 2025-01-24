@@ -20,6 +20,7 @@ import Banner from '../Components/Banner';
 
 
 
+
 function Home() {
   
   return (
@@ -28,7 +29,7 @@ function Home() {
     {/* moving line */}
     <div className="infiniteScroll  w-100 text-dark" style={{backgroundColor:"#ffdbe6"}}>
     <marquee  >
-    Get upto 30% discount on Super Class Buses by booking your tickets online. Book now to avail your offer.Take advantage of this special offer and save big on your travel plans. 
+    Book your journey anytime, anywhere with fast, easy, and affordable bus tickets. Convenient travel made simple for everyone!
 
     </marquee>
     </div>
@@ -39,10 +40,11 @@ function Home() {
     <div className="small-banner m-5 d-flex border rounded " style={{ backgroundColor:"lightpink"}}>
     <img src={offer} height={"150px"} width={"350px"}/>
       <div className="offer m-3 mx-5 ">
-        <h2> Get upto 30% discount</h2>
+      <h2> Get upto 30% discount</h2>
         <h6>On Super Class Buses by booking your tickets online. Book now to avail your offer.Don’t miss this opportunity to make your journey more affordable and convenient. Book now to secure your discounted fare and experience premium travel at a lower price. Hurry, this exciting deal won’t last forever—reserve your spot today and enjoy the savings!
 
         </h6>
+        
 
       </div>
  </div>

@@ -146,7 +146,7 @@ function LandingPage() {
               ))
           ) : (
             <div style={{ textAlign: 'center', width: '100%' }}>
-              <h3></h3>
+              <h3>Nothing To Display</h3>
             </div>
           )}
         </Row>

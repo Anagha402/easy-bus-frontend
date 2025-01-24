@@ -22,11 +22,7 @@ function DefaultLayout({children}) {
             icon:<i class="fa-solid fa-book"></i>,
             path:"/bookings"
         },
-        {
-            name:"Profile",
-            icon:<i class="fa-solid fa-user"></i>,
-            path:"/profile"
-        },
+        
         {
             name:"Logout",
             icon:<i class="fa-solid fa-right-from-bracket"></i>,
