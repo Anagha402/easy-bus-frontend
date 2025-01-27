@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 
 import { useSelector } from 'react-redux'
+import Swal from 'sweetalert2'
 
 
 function DefaultLayout({children}) {
@@ -84,8 +85,25 @@ function DefaultLayout({children}) {
                 return <div  className={`${activeRoute === item.path ? 'active-menu-item' : ''} menu-item`}>
                     <i>{item.icon}</i>
                    {!collapsed &&  <span onClick={()=>{ if(item.path==='/logout'){
-                    sessionStorage.removeItem("token")
-                    navigate("/login")
+
+Swal.fire({
+    title: "Are you sure you want to logout?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, logout!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sessionStorage.removeItem("token");
+      navigate("/login");
+    }
+  });
+  
+                    //alert("Are you sure you want to logout")
+                    //sessionStorage.removeItem("token")
+                    //navigate("/login")
                    }else{
                     navigate(item.path)
 

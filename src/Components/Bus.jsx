@@ -22,7 +22,7 @@ function Bus({bus}) {
 
             <div>
                 <p className='text-md fw-bold'>Price : </p>
-                <p className='text-sm'> ${bus.fare}  </p>
+                <p className='text-sm'> &#8377;{bus.fare}  </p>
             </div>
         </div>
 
