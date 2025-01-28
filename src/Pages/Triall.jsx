@@ -8,7 +8,7 @@ const AdminBookings = () => {
   const dispatch = useDispatch();
   const [bookings, setBookings] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(7); // Show 7 bookings per page
+  const [pageSize] = useState(8); // Show 8 bookings per page
 
   // Fetch all bookings
   const fetchBookings = async () => {
@@ -86,7 +86,6 @@ const AdminBookings = () => {
       {/* Bookings Table */}
       <Card>
         <Table
-        
           columns={columns}
           dataSource={paginatedData}
           rowKey="_id"

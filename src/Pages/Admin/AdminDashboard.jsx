@@ -14,6 +14,8 @@ function AdminDashboard() {
   const [revenueData, setRevenueData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [totalRevenueForSelectedDate, setTotalRevenueForSelectedDate] = useState(0);
+  const [monthlyRevenue, setMonthlyRevenue] = useState(0);
+  const [yearlyRevenue, setYearlyRevenue] = useState(0);
 
   // Fetch initial dashboard data
   const fetchData = async () => {
@@ -50,7 +52,6 @@ function AdminDashboard() {
         }));
         setRevenueData(formattedData);
 
-        // Calculate total revenue for the selected date
         const totalRevenueForDate = formattedData.reduce((acc, item) => acc + item.revenue, 0);
         setTotalRevenueForSelectedDate(totalRevenueForDate);
       } else {
@@ -62,11 +63,54 @@ function AdminDashboard() {
     }
   };
 
+  // Fetch revenue for selected month
+  const fetchMonthlyRevenue = async (month, year) => {
+    try {
+      dispatch(ShowLoading());
+      const response = await api.post('/api/bookings/get-revenue-by-month', { month, year });
+      dispatch(HideLoading());
+
+      if (response.data.success) {
+        setMonthlyRevenue(response.data.totalRevenue);
+      } else {
+        message.error(response.data.message);
+      }
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error('An error occurred while fetching monthly revenue.');
+    }
+  };
+
+  // Fetch revenue for selected year
+  const fetchYearlyRevenue = async (year) => {
+    try {
+      dispatch(ShowLoading());
+      const response = await api.post('/api/bookings/get-revenue-by-year', { year });
+      dispatch(HideLoading());
+
+      if (response.data.success) {
+        setYearlyRevenue(response.data.totalRevenue);
+      } else {
+        message.error(response.data.message);
+      }
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error('An error occurred while fetching yearly revenue.');
+    }
+  };
+
   // Handle date selection
   const handleDateChange = (date) => {
     const formattedDate = date.format('YYYY-MM-DD');
     setSelectedDate(formattedDate);
     fetchRevenueDataByDate(formattedDate);
+
+    const selectedMonth = date.month() + 1; // Get month (1-12)
+    const selectedYear = date.year(); // Get year
+
+    // Fetch monthly and yearly revenue when a date is selected
+    fetchMonthlyRevenue(selectedMonth, selectedYear);
+    fetchYearlyRevenue(selectedYear);
   };
 
   // Fetch data on component mount and set today's date as default
@@ -75,37 +119,56 @@ function AdminDashboard() {
     const today = new Date().toISOString().split('T')[0];
     setSelectedDate(today);
     fetchRevenueDataByDate(today);
+
+    const currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+    fetchMonthlyRevenue(currentMonth, currentYear);
+    fetchYearlyRevenue(currentYear);
   }, []);
 
+  // Format the selected date for the card title
+  const selectedMonth = selectedDate ? new Date(selectedDate).getMonth() + 1 : new Date().getMonth() + 1;
+  const selectedYear = selectedDate ? new Date(selectedDate).getFullYear() : new Date().getFullYear();
+
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '20px', width: '100%', height: '640px', overflow: 'hidden' }}>
       <PageTitle title="Admin Dashboard" />
       {/* Total Metrics */}
       <Row gutter={16} style={{ marginBottom: '20px' }}>
-        <Col span={6}>
-          <Card title="Total Revenue" bordered={false}>
-            <h2 style={{ textAlign: 'center', fontSize: '24px' }}>₹{totalRevenue.toFixed(2)}</h2>
+        <Col span={4}>
+          <Card title="Total Revenue" bordered={false} style={{ width: '100%' }}>
+            <h2 style={{ textAlign: 'center', fontSize: '24px' }}>₹{totalRevenue.toFixed(2)} </h2>
           </Card>
         </Col>
-        <Col span={6}>
-          <Card title="Total Users" bordered={false}>
+        <Col span={4}>
+          <Card title="Total Users" bordered={false} style={{ width: '100%' }}>
             <h2 style={{ textAlign: 'center', fontSize: '24px' }}>{totalUsers}</h2>
           </Card>
         </Col>
-        <Col span={6}>
-          <Card title="Total Bookings" bordered={false}>
+        <Col span={4}>
+          <Card title="Total Bookings" bordered={false} style={{ width: '100%' }}>
             <h2 style={{ textAlign: 'center', fontSize: '24px' }}>{totalBookings}</h2>
           </Card>
         </Col>
-        <Col span={6}>
-          <Card title={`Revenue on ${selectedDate || 'Selected Date'}`} bordered={false}>
+        <Col span={4}>
+          <Card title={` ${selectedDate || 'Selected Date'}`} bordered={false} style={{ width: '100%' }}>
             <h2 style={{ textAlign: 'center', fontSize: '24px' }}>₹{totalRevenueForSelectedDate.toFixed(2)}</h2>
+          </Card>
+        </Col>
+        <Col span={4}>
+          <Card title={`Revenue for ${selectedMonth}/${selectedYear}`} bordered={false} style={{ width: '100%' }}>
+            <h2 style={{ textAlign: 'center', fontSize: '24px' }}>₹{monthlyRevenue.toFixed(2)}</h2>
+          </Card>
+        </Col>
+        <Col span={4}>
+          <Card title={`Revenue for ${selectedYear}`} bordered={false} style={{ width: '100%' }}>
+            <h2 style={{ textAlign: 'center', fontSize: '24px' }}>₹{yearlyRevenue.toFixed(2)}</h2>
           </Card>
         </Col>
       </Row>
 
       {/* Revenue Data */}
-      <Row gutter={16}>
+      <Row gutter={16} style={{ height: 'calc(100% - 380px)' }}>
         <Col span={8}>
           <Card>
             <h3>Select a Date</h3>

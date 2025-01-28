@@ -1,6 +1,7 @@
 import React from "react";
 import { Row, Col } from "antd";
 import "../resources/bus.css";
+import steering from '../assets/images/steering-wheel.png';
 
 function SeatSelection({ selectedSeats, setSelectedSeats, bus }) {
     const capacity = parseInt(bus.capacity);
@@ -13,31 +14,70 @@ function SeatSelection({ selectedSeats, setSelectedSeats, bus }) {
         }
     };
 
+    const numRows = Math.ceil(capacity / 4);
+
     return (
-        <div className="bus-container p-3 mt-5 mx-5 " >
-            <Row gutter={[10, 10]}>
-                {Array.from(Array(capacity).keys()).map((seat) => {
-                    const seatNumber = seat + 1;
-                    let seatClass = "";
+        <div className="bus-container mt-4 mx-5">
+            <img src={steering} alt="Steering Wheel" className="steering-wheel" />
+            {Array.from(Array(numRows).keys()).map((row) => {
+                const startSeatNumber = row * 4 + 1;
 
-                    if (selectedSeats.includes(seatNumber)) {
-                        seatClass = "selected-seat";
-                    } else if (bus.seatsBooked.includes(seatNumber)) {
-                        seatClass = "booked-seat";
-                    }
+                return (
+                    <Row key={row} className="bus-row ">
+                        {/* Seats 1 and 2 */}
+                        <Col span={11} className="seat-col ">
+                            {Array.from([0, 1]).map((seatIndex) => {
+                                const seatNumber = startSeatNumber + seatIndex;
+                                if (seatNumber > capacity) return null;
 
-                    return (
-                        <Col span={6} key={seatNumber}>
-                            <div
-                                className={`seat ${seatClass}`}
-                                onClick={() => selectOrUnSelectSeats(seatNumber)}
-                            >
-                                {seatNumber}
-                            </div>
+                                let seatClass = "";
+                                if (selectedSeats.includes(seatNumber)) {
+                                    seatClass = "selected-seat";
+                                } else if (bus.seatsBooked.includes(seatNumber)) {
+                                    seatClass = "booked-seat";
+                                }
+
+                                return (
+                                    <div
+                                        key={seatNumber}
+                                        className={`seat ${seatClass}`}
+                                        onClick={() => selectOrUnSelectSeats(seatNumber)}
+                                    >
+                                        {seatNumber}
+                                    </div>
+                                );
+                            })}
                         </Col>
-                    );
-                })}
-            </Row>
+                        <Col span={2}></Col>
+                        
+
+                        {/* Seats 3 and 4 */}
+                        <Col span={11} className="seat-col">
+                            {Array.from([2, 3]).map((seatIndex) => {
+                                const seatNumber = startSeatNumber + seatIndex;
+                                if (seatNumber > capacity) return null;
+
+                                let seatClass = "";
+                                if (selectedSeats.includes(seatNumber)) {
+                                    seatClass = "selected-seat";
+                                } else if (bus.seatsBooked.includes(seatNumber)) {
+                                    seatClass = "booked-seat";
+                                }
+
+                                return (
+                                    <div
+                                        key={seatNumber}
+                                        className={`seat ${seatClass}`}
+                                        onClick={() => selectOrUnSelectSeats(seatNumber)}
+                                    >
+                                        {seatNumber}
+                                    </div>
+                                );
+                            })}
+                        </Col>
+                    </Row>
+                );
+            })}
         </div>
     );
 }

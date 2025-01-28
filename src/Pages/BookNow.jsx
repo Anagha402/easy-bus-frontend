@@ -5,6 +5,7 @@ import { Col, message, Row } from "antd";
 import { ShowLoading, HideLoading } from "../Redux/alertSlice";
 import api from "../services/commonAPI";
 import SeatSelection from "../Components/SeatSelection";
+import "../resources/bus.css";
 
 function BookNow() {
     const dispatch = useDispatch();
@@ -106,7 +107,7 @@ function BookNow() {
     return (
         <>
             {bus && (
-                <Row style={{ height: "90vh", width: "1320px", backgroundColor: "white" }}>
+                <Row style={{ height: "90vh", width: "1280px", backgroundColor: "white" }}>
                     <Col lg={12} xs={24} sm={24} className="p-4">
                         <h1 style={{ color: "rgb(190, 9, 69)" }} className="text-xxl fw-bolder">
                             {bus.name}
@@ -138,9 +139,32 @@ function BookNow() {
                         </button>
                     </Col>
 
-                    <Col lg={12} xs={24} sm={24}>
+                    <Col lg={7} xs={24} sm={24}>
                         <SeatSelection selectedSeats={selectedSeats} setSelectedSeats={setSelectedSeats} bus={bus} />
                     </Col>
+
+                    {/* seat availability */}
+                    <Col lg={5} style={{marginTop: "90px"}}>
+  <div className="d-flex align-items-center">
+    <div style={{width: '15px', height: '15px', backgroundColor: 'white'}} className="mx-1 m-1 border border-dark"></div> 
+    : Available Seats
+    </div>
+  <div className="d-flex align-items-center">
+    <div 
+      style={{width: '15px', height: '15px', backgroundColor: 'green'}} 
+      className="mx-1 m-1"
+    ></div> 
+    : Selected Seats
+  </div>
+  <div className="d-flex align-items-center">
+    <div 
+      style={{width: '15px', height: '15px', backgroundColor: 'grey'}} 
+      className="mx-1 m-1"
+    ></div> 
+    : Booked Seats
+  </div>
+</Col>
+
                 </Row>
             )}
         </>
