@@ -17,7 +17,7 @@ const AdminBookings = () => {
       const response = await api.post('/api/bookings/get-all-bookings');
       dispatch(HideLoading());
       if (response.data.success) {
-        setBookings(response.data.data);
+        setBookings(response.data.data); // Use data directly from API response
       } else {
         message.error(response.data.message);
       }
@@ -62,9 +62,9 @@ const AdminBookings = () => {
     },
     {
       title: 'Total Amount',
-      dataIndex: 'totalAmount',
+      dataIndex: 'totalAmount', // Use totalAmount field directly
       key: 'totalAmount',
-      render: (amount) => `₹${amount.toFixed(2)}`, // Display the amount in INR format
+      render: (amount) => `₹${amount.toFixed(2)}`, // Display amount in INR format
     },
   ];
 
@@ -86,7 +86,6 @@ const AdminBookings = () => {
       {/* Bookings Table */}
       <Card>
         <Table
-        
           columns={columns}
           dataSource={paginatedData}
           rowKey="_id"
