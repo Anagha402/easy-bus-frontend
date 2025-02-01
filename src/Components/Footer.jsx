@@ -14,47 +14,8 @@ function Footer() {
     <>
     <MDBFooter className='text-center mt-5' color='white' style={{backgroundColor:"rgb(190, 9, 69)"}}>
       <MDBContainer className='p-4'>
-        <section className='mb-4'>
-          <MDBBtn outline color="light" floating className='m-1' href='#!' role='button'>
-            <MDBIcon fab icon='facebook-f' />
-          </MDBBtn>
+        
 
-          <MDBBtn outline color="light" floating className='m-1' href='#!' role='button'>
-            <MDBIcon fab icon='twitter' />
-          </MDBBtn>
-
-          <MDBBtn outline color="light" floating className='m-1' href='#!' role='button'>
-            <MDBIcon fab icon='google' />
-          </MDBBtn>
-
-          <MDBBtn outline color="light" floating className='m-1' href='#!' role='button'>
-            <MDBIcon fab icon='instagram' />
-          </MDBBtn>
-
-          
-
-          
-        </section>
-
-        <section className=''>
-          <form action=''>
-            <MDBRow className='d-flex justify-content-center'>
-              <MDBCol size="auto">
-                <p className='pt-2'>
-                  <strong>Contact Us</strong>
-                </p>
-              </MDBCol>
-
-              <MDBCol md='5' start>
-                <MDBInput contrast type='email'  className='mb-4'placeholder='Enter your email address' />
-              </MDBCol>
-
-              <MDBCol size="auto">
-                
-              </MDBCol>
-            </MDBRow>
-          </form>
-        </section>
 
         <section className='mb-4'>
           

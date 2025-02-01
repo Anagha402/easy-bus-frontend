@@ -37,70 +37,107 @@ function BookNow() {
     };
 
     
-    const handleRegister = async () => {
-        const totalAmount = bus.fare * selectedSeats.length; // Use the original amount
+    // const handleRegister = async () => {
+    //     const totalAmount = bus.fare * selectedSeats.length; // Use the original amount
     
+    //     try {
+    //         dispatch(ShowLoading());
+    //         const orderResponse = await api.post("/api/payment/create-order", { amount: totalAmount, couponCode }); // Send original amount
+    //         dispatch(HideLoading());
+    
+    //         if (orderResponse.data.success) {
+    //             const { order } = orderResponse.data;
+                
+    //             // Log the order amount received from Razorpay API
+    //             console.log("Razorpay order received: ", order);
+    //             console.log("Amount to be passed to Razorpay modal (in paise):", order.amount);
+    
+    //             const options = {
+    //                 key: "rzp_test_iBqySrSexqQTOR",
+    //                 amount: order.amount, // Razorpay expects this in paise
+    //                 currency: order.currency,
+    //                 name: "Easy Bus",
+    //                 description: `Bus booking for ${bus.name}`,
+    //                 order_id: order.id,
+    //                 handler: async (response) => {
+    //                     try {
+    //                         // Send payment details to backend for verification
+    //                         const verifyResponse = await api.post("/api/payment/verify-payment", {
+    //                             razorpay_order_id: response.razorpay_order_id,
+    //                             razorpay_payment_id: response.razorpay_payment_id,
+    //                             razorpay_signature: response.razorpay_signature,
+    //                             bus: bus._id,
+    //                             user: user?._id,
+    //                             seats: selectedSeats,
+    //                             amount: totalAmount, // Send original amount
+    //                             couponCode, // Pass coupon code for backend processing
+    //                         });
+    
+    //                         if (verifyResponse.data.success) {
+    //                             message.success("Payment successful! Booking confirmed.");
+    //                             navigate("/bookings");
+    //                         } else {
+    //                             message.error("Payment verification failed.");
+    //                         }
+    //                     } catch (err) {
+    //                         message.error(`Error during payment verification: ${err.message}`);
+    //                     }
+    //                 },
+    //                 theme: {
+    //                     color: "#3399cc",
+    //                 },
+    //             };
+    
+    //             console.log("Opening Razorpay with the following options:", options);
+    
+    //             const razorpay = new window.Razorpay(options);
+    //             razorpay.open();
+    //         } else {
+    //             message.error(orderResponse.data.message);
+    //         }
+    //     } catch (error) {
+    //         dispatch(HideLoading());
+    //         message.error(error.message);
+    //     }
+    // };
+    
+    const handleRegister = async () => {
+        const totalAmount =  bus.fare * selectedSeats.length;
+
         try {
             dispatch(ShowLoading());
-            const orderResponse = await api.post("/api/payment/create-order", { amount: totalAmount, couponCode }); // Send original amount
+            const orderResponse = await api.post("/api/payment/create-order", { amount: totalAmount, couponCode });
             dispatch(HideLoading());
-    
+
             if (orderResponse.data.success) {
-                const { order } = orderResponse.data;
-                
-                // Log the order amount received from Razorpay API
-                console.log("Razorpay order received: ", order);
-                console.log("Amount to be passed to Razorpay modal (in paise):", order.amount);
-    
                 const options = {
                     key: "rzp_test_iBqySrSexqQTOR",
-                    amount: order.amount, // Razorpay expects this in paise
-                    currency: order.currency,
-                    name: "Easy Bus",
-                    description: `Bus booking for ${bus.name}`,
-                    order_id: order.id,
+                    amount: orderResponse.data.order.amount,
+                    currency: "INR",
+                    order_id: orderResponse.data.order.id,
                     handler: async (response) => {
-                        try {
-                            // Send payment details to backend for verification
-                            const verifyResponse = await api.post("/api/payment/verify-payment", {
-                                razorpay_order_id: response.razorpay_order_id,
-                                razorpay_payment_id: response.razorpay_payment_id,
-                                razorpay_signature: response.razorpay_signature,
-                                bus: bus._id,
-                                user: user?._id,
-                                seats: selectedSeats,
-                                amount: totalAmount, // Send original amount
-                                couponCode, // Pass coupon code for backend processing
-                            });
-    
-                            if (verifyResponse.data.success) {
-                                message.success("Payment successful! Booking confirmed.");
-                                navigate("/bookings");
-                            } else {
-                                message.error("Payment verification failed.");
-                            }
-                        } catch (err) {
-                            message.error(`Error during payment verification: ${err.message}`);
+                        const verifyResponse = await api.post("/api/payment/verify-payment", {
+                            ...response,
+                            bus: bus._id,
+                            user: user._id,
+                            seats: selectedSeats,
+                            amount: totalAmount,
+                            couponCode,
+                        });
+
+                        if (verifyResponse.data.success) {
+                            message.success("Payment successful! Confirmation email sent.");
+                            navigate("/bookings");
                         }
                     },
-                    theme: {
-                        color: "#3399cc",
-                    },
                 };
-    
-                console.log("Opening Razorpay with the following options:", options);
-    
-                const razorpay = new window.Razorpay(options);
-                razorpay.open();
-            } else {
-                message.error(orderResponse.data.message);
+
+                new window.Razorpay(options).open();
             }
         } catch (error) {
-            dispatch(HideLoading());
             message.error(error.message);
         }
     };
-    
     
     
     
