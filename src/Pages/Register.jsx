@@ -14,24 +14,43 @@ import { ToastContainer, toast } from 'react-toastify';
 function Register() {
   const navigate=useNavigate()
   const dispatch=useDispatch()
-    const onFinish = async (values) => {
-        try {
-          dispatch(ShowLoading())
-          const response = await api.post("/api/users/register", values);  // Making the POST request to the backend
-          dispatch(HideLoading())
-          if (response.data.success) {
-            message.success(response.data.message);
-            navigate('/login')
 
-          } else {
-            toast.warning(response.data.message);
-          }
-        } catch (error) {
-          dispatch(HideLoading())
-          toast.warning(error.message);  // Display error if request fails
-        }
-      };
-        
+
+// const onFinish = async (values) => {
+//         try {
+//           dispatch(ShowLoading())
+//           const response = await api.post("/api/users/register", values);  // Making the POST request to the backend
+//           dispatch(HideLoading())
+//           if (response.data.success) {
+//             message.success(response.data.message);
+//             navigate('/login')
+
+//           } else {
+//             toast.warning(response.data.message);
+//           }
+//         } catch (error) {
+//           dispatch(HideLoading())
+//           toast.warning(error.message);  // Display error if request fails
+//         }
+//       };
+const onFinish = async (values) => {
+  try {
+      dispatch(ShowLoading());
+      const response = await api.post("/api/users/register", values);
+      dispatch(HideLoading());
+
+      if (response.data.success) {
+          message.success(response.data.message);
+          navigate(`/otp-verification?email=${values.email}`);  // Navigate to OTP page
+      } else {
+          toast.warning(response.data.message);
+      }
+  } catch (error) {
+      dispatch(HideLoading());
+      toast.warning(error.message);
+  }
+};
+  
   return (
     <>
     <div className="h-screen d-flex justify-content-center align-items-center" style={{backgroundColor:"rgb(190, 9, 69)"}}>

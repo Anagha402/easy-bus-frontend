@@ -17,6 +17,7 @@ import BookNow from './Pages/BookNow'
 import Bookings from './Pages/Bookings'
 import AdminDashboard from './Pages/Admin/AdminDashboard'
 import AdminBookings from './Pages/Admin/AdminBookings'
+import OtpVerification from './Pages/OtpVerification'
 
 
 function App() {
@@ -30,6 +31,8 @@ function App() {
         <Route path="/" element={<ProtectedRoute><LandingPage/></ProtectedRoute>}/>
         <Route path="/register" element={<PublicRoute><Register/></PublicRoute>}/>
         <Route path="/login" element={<PublicRoute><Login/></PublicRoute>}/>
+        <Route path="/otp-verification" element={<PublicRoute><OtpVerification/></PublicRoute>}/>
+
         
         <Route path="/admin/buses" element={<ProtectedRoute><AdminBuses/></ProtectedRoute>}/>
         <Route path="/admin/users" element={<ProtectedRoute><AdminUsers/></ProtectedRoute>}/>
