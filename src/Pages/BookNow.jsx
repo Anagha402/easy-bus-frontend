@@ -36,64 +36,7 @@ function BookNow() {
         }
     };
 
-    // Handle Razorpay payment and booking
-    // const handleRegister = async () => {
-    //     const totalAmount = bus.fare * selectedSeats.length; // Use the original amount
     
-    //     try {
-    //         dispatch(ShowLoading());
-    //         const orderResponse = await api.post("/api/payment/create-order", { amount: totalAmount }); // Send original amount
-    //         dispatch(HideLoading());
-    
-    //         if (orderResponse.data.success) {
-    //             const { order } = orderResponse.data;
-    
-    //             const options = {
-    //                 key: "rzp_test_iBqySrSexqQTOR",
-    //                 amount: order.amount, // Razorpay expects this in paise
-    //                 currency: order.currency,
-    //                 name: "Easy Bus",
-    //                 description: `Bus booking for ${bus.name}`,
-    //                 order_id: order.id,
-    //                 handler: async (response) => {
-    //                     try {
-    //                         // Send payment details to backend for verification
-    //                         const verifyResponse = await api.post("/api/payment/verify-payment", {
-    //                             razorpay_order_id: response.razorpay_order_id,
-    //                             razorpay_payment_id: response.razorpay_payment_id,
-    //                             razorpay_signature: response.razorpay_signature,
-    //                             bus: bus._id,
-    //                             user: user?._id,
-    //                             seats: selectedSeats,
-    //                             amount: totalAmount, // Send original amount
-    //                             couponCode, // Pass coupon code for backend processing
-    //                         });
-    
-    //                         if (verifyResponse.data.success) {
-    //                             message.success("Payment successful! Booking confirmed.");
-    //                             navigate("/bookings");
-    //                         } else {
-    //                             message.error("Payment verification failed.");
-    //                         }
-    //                     } catch (err) {
-    //                         message.error(`Error during payment verification: ${err.message}`);
-    //                     }
-    //                 },
-    //                 theme: {
-    //                     color: "#3399cc",
-    //                 },
-    //             };
-    
-    //             const razorpay = new window.Razorpay(options);
-    //             razorpay.open();
-    //         } else {
-    //             message.error(orderResponse.data.message);
-    //         }
-    //     } catch (error) {
-    //         dispatch(HideLoading());
-    //         message.error(error.message);
-    //     }
-    // };
     const handleRegister = async () => {
         const totalAmount = bus.fare * selectedSeats.length; // Use the original amount
     
@@ -239,6 +182,30 @@ function BookNow() {
 
                     <Col lg={7} xs={24} sm={24}>
                         <SeatSelection selectedSeats={selectedSeats} setSelectedSeats={setSelectedSeats} bus={bus} />
+                    </Col>
+
+
+                      {/* seat availability */}
+                      
+                      <Col lg={5} style={{ marginTop: "90px" }}>
+                        <div className="d-flex align-items-center">
+                            <div style={{ width: "15px", height: "15px", backgroundColor: "white" }} className="mx-1 m-1 border border-dark"></div> 
+                            : Available Seats
+                        </div>
+                        <div className="d-flex align-items-center">
+                            <div
+                                style={{ width: "15px", height: "15px", backgroundColor: "green" }}
+                                className="mx-1 m-1"
+                            ></div> 
+                            : Selected Seats
+                        </div>
+                        <div className="d-flex align-items-center">
+                            <div
+                                style={{ width: "15px", height: "15px", backgroundColor: "grey" }}
+                                className="mx-1 m-1"
+                            ></div> 
+                            : Booked Seats
+                        </div>
                     </Col>
                 </Row>
             )}
