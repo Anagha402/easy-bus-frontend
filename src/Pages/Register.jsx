@@ -41,19 +41,20 @@ const onFinish = async (values) => {
 
       if (response.data.success) {
           message.success(response.data.message);
-          navigate(`/otp-verification?email=${values.email}`);  // Navigate to OTP page
+          navigate(`/otp-verification?email=${values.email}`);
       } else {
-          toast.warning(response.data.message);
+          message.error(response.data.message);
       }
   } catch (error) {
       dispatch(HideLoading());
-      toast.warning(error.message);
+      message.error("Registration failed. Please try again.");
   }
 };
+
   
   return (
     <>
-    <div className="h-screen d-flex justify-content-center align-items-center" style={{backgroundColor:"rgb(190, 9, 69)"}}>
+    <div className="h-screen d-flex justify-content-center align-items-center" style={{backgroundColor:"rgba(165, 18, 70, 0.37)"}}>
         
         <div className="w-400 card  ">
            
@@ -62,22 +63,22 @@ const onFinish = async (values) => {
         <hr />
         
     <Form.Item label="Name" name='name' >
-        <input type="text"  />
+        <input className='form-control' type="text"  />
         
     </Form.Item>
 
     <Form.Item label="Email" name='email'>
-        <input type="email" />
+        <input className='form-control' type="email" />
         
     </Form.Item>
 
     <Form.Item label="Password" name='password'>
-        <input type="password" />
+        <input className='form-control' type="password" />
         
     </Form.Item>
 
     
-          <div className="d-flex justify-content-between">
+          <div className="d-flex justify-content-between mt-3">
             <p>Click here to <Link  to={'/login'} className='text-decoration-none text-success'> Login</Link> </p>
             
           <button className='btn btn-primary' type="submit">Register</button>

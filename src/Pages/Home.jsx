@@ -48,8 +48,17 @@ function Home() {
 
       </div>
  </div>
- 
 
+ {/* ABOUT */}
+ 
+ <div id="about" className="container" >
+ <h1 className='text-center m-3' style={{fontWeight:"bolder"}}>About</h1>
+  <p >Easy Bus is a trusted and convenient online bus ticket booking platform designed to make your travel experience seamless and stress-free. Whether you're commuting for work, embarking on a leisure trip, or planning a long-distance journey, Easy Bus ensures that you can find and book bus tickets effortlessly. We understand that travel should be enjoyable, and that starts with a smooth booking process. That’s why we have built an easy-to-use platform that allows you to search for routes, compare ticket prices, and make bookings in just a few simple steps.</p>
+  <br />
+  <p>With Easy Bus, you no longer have to wait in long queues at ticket counters or worry about last-minute seat unavailability. Our website provides real-time seat availability, ensuring that you can choose from a variety of options that best fit your schedule and budget. Whether you prefer luxury coaches, sleeper buses, or budget-friendly travel options, we partner with trusted and reputable bus operators to bring you a comfortable and reliable journey. Our goal is to make travel accessible and convenient for everyone, offering a hassle-free way to plan your trips.</p>
+ <br />
+ <p>Easy Bus is not just a booking platform—it’s a travel companion that simplifies your journey. With our commitment to providing a seamless and reliable experience, we continue to enhance our services to meet the evolving needs of travelers. So why wait? Book your next trip with Easy Bus and experience the easiest, fastest, and most convenient way to travel. Whether you’re planning a short trip or a long-distance adventure, we are here to make your journey effortless and enjoyable. Safe travels with Easy Bus!</p>
+ </div>
  {/* top destinations */}
  <Row className='m-5'>
     <h1 className='text-center m-3' style={{fontWeight:"bolder"}}>Top Destinations</h1>
@@ -100,7 +109,7 @@ function Home() {
  </Row>
 
  {/* our facilities */}
- <Row className='m-5 mt-4'>
+ <Row id="services" className='m-5 mt-4'>
  <h1 className='text-center m-3' style={{fontWeight:"bolder"}}>Our Facilities</h1>
     <Col>
     <Card style={{ width: '25rem',backgroundColor:"#ffd4db", boxShadow: '0px  4px 6px rgba(29, 28, 28, 0.45)' }}
@@ -145,7 +154,7 @@ function Home() {
 
 
  {/* bus amenities */}
- <Row className='m-5 mt-4'>
+ <Row id="amenities" className='m-5 mt-4'>
  <h1 className='text-center m-3' style={{fontWeight:"bolder"}}>Bus Amenities</h1>
     <Col>
     <Card style={{ width: '25rem',backgroundColor:"#ffd4db", boxShadow: '0px  4px 6px rgba(29, 28, 28, 0.45)' }}

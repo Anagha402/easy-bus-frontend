@@ -47,6 +47,11 @@ function DefaultLayout({children}) {
             icon:<i class="fa-solid fa-user"></i>
         },
         {
+            name:'Passengers',
+            path:'/admin/passengers',
+            icon:<i class="fa-solid fa-users-rectangle"></i>
+        },
+        {
             name:'Bookings',
             path:'/admin/bookings',
             icon:<i class="fa-solid fa-list"></i>

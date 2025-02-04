@@ -11,6 +11,7 @@ import {ShowLoading, HideLoading} from '../Redux/alertSlice'
 
 
 
+
 function Login() {
     const navigate=useNavigate()
     const dispatch=useDispatch()
@@ -43,9 +44,9 @@ function Login() {
   return (
     <>
     
-    <div className="h-screen d-flex justify-content-center align-items-center  " style={{backgroundColor:"rgb(190, 9, 69)"}}>
+    <div className=" h-screen d-flex justify-content-center align-items-center  " style={{backgroundColor:"rgba(165, 18, 70, 0.37)"}}>
         
-        <div className="w-400 card  ">
+        <div className="w-400 card  "style={{backgroundColor:""}} >
            
         <Form layout='vertical' className='border p-5' onFinish={onFinish}>
         <h4 className='mb-4  '>Easy Bus - Login</h4>
@@ -56,12 +57,12 @@ function Login() {
     
 
     <Form.Item label="Email" name='email'>
-        <input type="email" />
+        <input className='form-control' type="email" />
         
     </Form.Item>
 
     <Form.Item label="Password" name='password'>
-        <input type="password" />
+        <input className='form-control' type="password" />
         
     </Form.Item>
 

@@ -33,17 +33,18 @@ function OtpVerification() {
         try {
             const enteredOtp = otp.join(""); // Combine OTP inputs
             const response = await api.post('/api/users/verify-otp', { email, otp: enteredOtp });
-
+    
             if (response.data.success) {
-                message.success(response.data.message);
-                navigate('/login');
+                message.success("OTP verified! Your account is now registered.");
+                navigate('/login'); // Redirect to login
             } else {
-                message.error(response.data.message);
+                message.error(response.data.message); // Show OTP error messages
             }
         } catch (error) {
-            message.error("Error verifying OTP");
+            message.error("Error verifying OTP. Please try again.");
         }
     };
+    
 
     return (
         <div className="otp-container" style={{ height: "100vh", backgroundColor: "rgba(193, 3, 66, 0.35)" }}>

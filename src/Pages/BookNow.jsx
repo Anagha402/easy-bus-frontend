@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { Col, message, Row } from "antd";
+import { Col, message, Modal, Row, Button, Input, Form, Select } from "antd";
 import { ShowLoading, HideLoading } from "../Redux/alertSlice";
 import api from "../services/commonAPI";
 import SeatSelection from "../Components/SeatSelection";
@@ -14,9 +14,12 @@ function BookNow() {
     const params = useParams();
     const navigate = useNavigate();
     const [selectedSeats, setSelectedSeats] = useState([]);
-    const [couponCode, setCouponCode] = useState(""); // Store entered coupon code
+    const [couponCode, setCouponCode] = useState(""); 
     const [isCouponApplied, setIsCouponApplied] = useState(false);
     const [discountedAmount, setDiscountedAmount] = useState(0);
+    const [isModalVisible, setIsModalVisible] = useState(false);  // State for modal visibility
+    const [passengerDetails, setPassengerDetails] = useState([]);  // Store passenger details
+    const [isFormValid, setIsFormValid] = useState(false);  // Check if form is fully filled
 
     // Fetch bus details
     const getBus = async () => {
@@ -36,74 +39,50 @@ function BookNow() {
         }
     };
 
+    const applyCoupon = () => {
+        const totalAmount = bus.fare * selectedSeats.length; 
+        console.log("Applying coupon. Total amount before discount:", totalAmount);
     
-    // const handleRegister = async () => {
-    //     const totalAmount = bus.fare * selectedSeats.length; // Use the original amount
-    
-    //     try {
-    //         dispatch(ShowLoading());
-    //         const orderResponse = await api.post("/api/payment/create-order", { amount: totalAmount, couponCode }); // Send original amount
-    //         dispatch(HideLoading());
-    
-    //         if (orderResponse.data.success) {
-    //             const { order } = orderResponse.data;
-                
-    //             // Log the order amount received from Razorpay API
-    //             console.log("Razorpay order received: ", order);
-    //             console.log("Amount to be passed to Razorpay modal (in paise):", order.amount);
-    
-    //             const options = {
-    //                 key: "rzp_test_iBqySrSexqQTOR",
-    //                 amount: order.amount, // Razorpay expects this in paise
-    //                 currency: order.currency,
-    //                 name: "Easy Bus",
-    //                 description: `Bus booking for ${bus.name}`,
-    //                 order_id: order.id,
-    //                 handler: async (response) => {
-    //                     try {
-    //                         // Send payment details to backend for verification
-    //                         const verifyResponse = await api.post("/api/payment/verify-payment", {
-    //                             razorpay_order_id: response.razorpay_order_id,
-    //                             razorpay_payment_id: response.razorpay_payment_id,
-    //                             razorpay_signature: response.razorpay_signature,
-    //                             bus: bus._id,
-    //                             user: user?._id,
-    //                             seats: selectedSeats,
-    //                             amount: totalAmount, // Send original amount
-    //                             couponCode, // Pass coupon code for backend processing
-    //                         });
-    
-    //                         if (verifyResponse.data.success) {
-    //                             message.success("Payment successful! Booking confirmed.");
-    //                             navigate("/bookings");
-    //                         } else {
-    //                             message.error("Payment verification failed.");
-    //                         }
-    //                     } catch (err) {
-    //                         message.error(`Error during payment verification: ${err.message}`);
-    //                     }
-    //                 },
-    //                 theme: {
-    //                     color: "#3399cc",
-    //                 },
-    //             };
-    
-    //             console.log("Opening Razorpay with the following options:", options);
-    
-    //             const razorpay = new window.Razorpay(options);
-    //             razorpay.open();
-    //         } else {
-    //             message.error(orderResponse.data.message);
-    //         }
-    //     } catch (error) {
-    //         dispatch(HideLoading());
-    //         message.error(error.message);
-    //     }
-    // };
-    
+        if (couponCode === "DISCOUNT30" && totalAmount > 3000) {
+            const discounted = parseFloat((totalAmount * 0.7).toFixed(2)); // 30% discount
+            setDiscountedAmount(discounted); 
+            setIsCouponApplied(true);
+            console.log(`Coupon applied. Discounted amount: ${discounted}`);
+            message.success("Coupon applied! 30% discount applied.");
+        } else {
+            console.error("Invalid coupon code or conditions not met.");
+            message.error("Invalid coupon code or conditions not met.");
+        }
+    };
+
+    // Handle form submission for passenger details
+    const handlePassengerDetailsChange = (e, index) => {
+        const { name, value } = e.target;
+        const updatedPassengers = [...passengerDetails];
+        updatedPassengers[index] = { ...updatedPassengers[index], [name]: value };
+        setPassengerDetails(updatedPassengers);
+        validateForm(updatedPassengers);
+    };
+
+    const validateForm = (details) => {
+        const isValid = details.every(detail => detail.name && detail.age && detail.gender);
+        setIsFormValid(isValid);
+    };
+
+    const showPassengerDetailsModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleOk = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+
     const handleRegister = async () => {
         const totalAmount =  bus.fare * selectedSeats.length;
-
         try {
             dispatch(ShowLoading());
             const orderResponse = await api.post("/api/payment/create-order", { amount: totalAmount, couponCode });
@@ -123,6 +102,7 @@ function BookNow() {
                             seats: selectedSeats,
                             amount: totalAmount,
                             couponCode,
+                            passengerDetails,  // Send passenger details
                         });
 
                         if (verifyResponse.data.success) {
@@ -133,32 +113,12 @@ function BookNow() {
                 };
 
                 new window.Razorpay(options).open();
+                setIsModalVisible(false);  // Close the modal on successful payment initiation
             }
         } catch (error) {
             message.error(error.message);
         }
     };
-    
-    
-    
-
-    const applyCoupon = () => {
-        const totalAmount = bus.fare * selectedSeats.length; // Calculate total in rupees
-        console.log("Applying coupon. Total amount before discount:", totalAmount);
-    
-        if (couponCode === "DISCOUNT30" && totalAmount > 3000) {
-            const discounted = parseFloat((totalAmount * 0.7).toFixed(2)); // 30% discount
-            setDiscountedAmount(discounted); // Update state with discounted amount
-            setIsCouponApplied(true);
-            console.log(`Coupon applied. Discounted amount: ${discounted}`);
-            message.success("Coupon applied! 30% discount applied.");
-        } else {
-            console.error("Invalid coupon code or conditions not met.");
-            message.error("Invalid coupon code or conditions not met.");
-        }
-    };
-    
-    
 
     useEffect(() => {
         getBus();
@@ -200,7 +160,7 @@ function BookNow() {
                                 onChange={(e) => setCouponCode(e.target.value)}
                             />
                             <button
-                                className="btn btn-warning"
+                                className="btn btn-warning mx-2"
                                 onClick={applyCoupon}
                                 disabled={bus?.fare * selectedSeats.length <= 3000}
                             >
@@ -210,7 +170,7 @@ function BookNow() {
 
                         <button
                             className={`btn btn-primary mt-3 ${selectedSeats.length === 0 && "disabled-button"}`}
-                            onClick={handleRegister}
+                            onClick={showPassengerDetailsModal}
                             disabled={selectedSeats.length === 0}
                         >
                             Book Now
@@ -221,10 +181,68 @@ function BookNow() {
                         <SeatSelection selectedSeats={selectedSeats} setSelectedSeats={setSelectedSeats} bus={bus} />
                     </Col>
 
+                    {/* Modal for Passenger Details */}
+                    <Modal
+                        title="Enter Passenger Details"
+                        open={isModalVisible}
+                        onOk={handleOk}
+                        onCancel={handleCancel}
+                        footer={[
+                            <Button key="cancel" onClick={handleCancel}>
+                                Cancel
+                            </Button>,
+                            <Button
+                                key="submit"
+                                type="primary"
+                                onClick={handleRegister}
+                                disabled={!isFormValid}
+                            >
+                                Make Payment
+                            </Button>,
+                        ]}
+                    >
+                        <Form >
+                            {Array.from({ length: selectedSeats.length }).map((_, index) => (
+                                <div key={index} className="passenger-form ">
+                                    <h3>Seat No: {selectedSeats[index]}</h3>
+                                    <Form.Item label="Name">
+                                        <Input
+                                            name="name"
+                                            value={passengerDetails[index]?.name || ""}
+                                            onChange={(e) => handlePassengerDetailsChange(e, index)}
+                                            style={{marginLeft:"8px", marginBottom:"5px"}}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item label="Age">
+                                        <Input
+                                            name="age"
+                                            type="number"
+                                            value={passengerDetails[index]?.age || ""}
+                                            onChange={(e) => handlePassengerDetailsChange(e, index)}
+                                            style={{marginLeft:"20px", width:"150px" ,marginBottom:"5px"}}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item label="Gender">
+                                        <Select
+                                            name="gender"
+                                            value={passengerDetails[index]?.gender || ""}
+                                            onChange={(value) => handlePassengerDetailsChange({ target: { name: "gender", value } }, index)}
+                                            style={{ width:'150px'}}
+                                        >
+                                            <Select.Option value="Male">Male</Select.Option>
+                                            <Select.Option value="Female">Female</Select.Option>
+                                            <Select.Option value="Other">Other</Select.Option>
+                                        </Select>
+                                    </Form.Item>
+                                </div>
+                            ))}
+                        </Form>
+                    </Modal>
 
-                      {/* seat availability */}
-                      
-                      <Col lg={5} style={{ marginTop: "90px" }}>
+                    {/* seat availability */}
+                    
+                    <Col lg={5} style={{ marginTop: "90px" }}>
+                    <h3>Seat Legend</h3>
                         <div className="d-flex align-items-center">
                             <div style={{ width: "15px", height: "15px", backgroundColor: "white" }} className="mx-1 m-1 border border-dark"></div> 
                             : Available Seats

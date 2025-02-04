@@ -23,10 +23,10 @@ function Header() {
           </Navbar.Brand>
         </Container>
         <div className="headings d-flex  " style={{marginRight:"100px"}}>
-          <a href=""className="  m-2 sub"style={{textDecoration:"none", fontSize:"20px", color:"white"}}>Home</a>
-          <a href="" className="m-2 sub" style={{textDecoration:"none", fontSize:"20px", color:"white"}}>About</a>
-          <a href="" className="m-2 sub" style={{textDecoration:"none", fontSize:"20px", color:"white"}}>Services</a>
-          <a href="" className="m-2 sub" style={{textDecoration:"none", fontSize:"20px", color:"white"}}>Amenities</a>
+          <a href="/home"className="  m-2 sub"style={{textDecoration:"none", fontSize:"20px", color:"white"}}>Home</a>
+          <a href="#about" className="m-2 sub" style={{textDecoration:"none", fontSize:"20px", color:"white"}}>About</a>
+          <a href="#services" className="m-2 sub" style={{textDecoration:"none", fontSize:"20px", color:"white"}}>Services</a>
+          <a href="#amenities" className="m-2 sub" style={{textDecoration:"none", fontSize:"20px", color:"white"}}>Amenities</a>
 
          
          

@@ -131,7 +131,7 @@ function Bookings() {
         className="border shadow-lg"
         dataSource={bookings}
         columns={columns}
-        pagination={false}
+        pagination={{ pageSize: 6 }} // Set page size to 5
         style={{ marginLeft: "50px", width: "1200px", marginTop: "40px" }}
       />
 

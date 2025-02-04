@@ -18,6 +18,7 @@ import Bookings from './Pages/Bookings'
 import AdminDashboard from './Pages/Admin/AdminDashboard'
 import AdminBookings from './Pages/Admin/AdminBookings'
 import OtpVerification from './Pages/OtpVerification'
+import AdminPassengers from './Pages/Admin/AdminPassengers'
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
         <Route path="/bookings" element={<ProtectedRoute><Bookings/></ProtectedRoute>}/>
         <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard/></ProtectedRoute>}/>
         <Route path="/admin/bookings" element={<ProtectedRoute><AdminBookings/></ProtectedRoute>}/>
+        <Route path="/admin/passengers" element={<ProtectedRoute><AdminPassengers/></ProtectedRoute>}/>
         
       </Routes>
     </>
