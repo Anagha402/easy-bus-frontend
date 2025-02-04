@@ -21,12 +21,24 @@ function BookNow() {
     const [passengerDetails, setPassengerDetails] = useState([]);  // Store passenger details
     const [isFormValid, setIsFormValid] = useState(false);  // Check if form is fully filled
 
+    const [isRoutesModalVisible, setIsRoutesModalVisible] = useState(false);
+    const showRoutesModal = async() => {
+        await getBus(); // Fetch the latest data before showing the modal
+        setIsRoutesModalVisible(true);
+    };
+    
+    const handleRoutesModalClose = () => {
+        setIsRoutesModalVisible(false);
+    };
+    
+
     // Fetch bus details
     const getBus = async () => {
         try {
             dispatch(ShowLoading());
             const response = await api.post("/api/buses/get-bus-by-id", { _id: params.id });
             dispatch(HideLoading());
+            console.log("Bus Data:", response.data); // Debugging
 
             if (response.data.success) {
                 setBus(response.data.data);
@@ -148,8 +160,9 @@ function BookNow() {
                         <hr />
 
                         <div className="d-flex flex-column gap-1">
-                            <h4 className="text-2xl">Selected Seats: {selectedSeats.join(", ")}</h4>
-                            <h1>Total Amount: &#8377;{totalAmount}</h1>
+                            <h5 className="">Selected Seats: {selectedSeats.join(", ")}</h5>
+                            <h3>Total Amount: &#8377;{totalAmount}</h3>
+                            <p className="text-primary fw-bold">30% discount for bookings above &#8377;3000</p>
                         </div>
 
                         <div className="coupon d-flex">
@@ -158,6 +171,7 @@ function BookNow() {
                                 className="form-control"
                                 value={couponCode}
                                 onChange={(e) => setCouponCode(e.target.value)}
+                                placeholder="Enter coupon code DISCOUNT30"
                             />
                             <button
                                 className="btn btn-warning mx-2"
@@ -261,6 +275,33 @@ function BookNow() {
                             ></div> 
                             : Booked Seats
                         </div>
+
+
+
+                        <button className="btn btn-info mt-3" onClick={showRoutesModal}>
+    View Bus Route
+</button>
+<Modal
+    title="Bus Routes"
+    open={isRoutesModalVisible}
+    onCancel={handleRoutesModalClose}
+    footer={[
+        <Button key="close" onClick={handleRoutesModalClose}>
+            Close
+        </Button>
+    ]}
+>
+    {bus?.routes && Array.isArray(bus.routes) && bus.routes.length > 0 ? (
+        <ul>
+            {bus.routes.map((route, index) => (
+                <li key={index}>{route}</li>
+            ))}
+        </ul>
+    ) : (
+        <p>No routes available for this bus.</p>
+    )}
+</Modal>
+
                     </Col>
                 </Row>
             )}

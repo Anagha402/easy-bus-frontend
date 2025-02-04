@@ -21,10 +21,16 @@ function BusForm({showBusForm,setShowBusForm, type='add', getData, selectedBus, 
       dispatch(ShowLoading())
       let response=null;
       if(type==='add'){
+        if (values.routes) {
+          values.routes = values.routes.split(",").map(route => route.trim());
+      }
         response= await api.post("/api/buses/add-bus", values)
 
 
       }else{
+        if (values.routes) {
+          values.routes = values.routes.split(",").map(route => route.trim());
+      }
         response= await api.post("/api/buses/update-bus", {...values, _id:selectedBus._id})
 
       }
@@ -138,6 +144,15 @@ function BusForm({showBusForm,setShowBusForm, type='add', getData, selectedBus, 
             <input type="text" className='form-control'/>
           </Form.Item>
         </Col>
+        <Col lg={24} xs={24}>
+            <Form.Item label="Bus Route" name="routes">
+             <input
+            type="text"
+            className="form-control"
+            placeholder="Enter routes like: CityA, CityB, CityC"
+             />
+           </Form.Item>
+         </Col>
 
         <Col lg={12} xs={24}>
           <Form.Item label="Status" name="status">
@@ -149,6 +164,9 @@ function BusForm({showBusForm,setShowBusForm, type='add', getData, selectedBus, 
             </select>
           </Form.Item>
         </Col>
+
+
+        
         </Row>
 
 
