@@ -93,7 +93,7 @@ const AdminPassengers = () => {
 
   return (
     <>
-    <h1>Passenger Details</h1>
+    <h1 className="fw-bolder">Passenger Details</h1>
     <div
       style={{
         display: "flex",
@@ -203,12 +203,12 @@ const AdminPassengers = () => {
       >
         {passengerDetails.length > 0 && (
           <div>
-            <h2>Passenger Details for Bus: {busNumber}</h2>
+            <h2>Passenger Details for Bus Number: {busNumber}</h2>
             <Table
               columns={columns}
               dataSource={passengerDetails}
               pagination={{
-                pageSize: 4,
+                pageSize: 8,
                 current: currentPage,
                 onChange: (page) => setCurrentPage(page),
               }}

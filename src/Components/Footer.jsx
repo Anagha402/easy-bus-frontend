@@ -50,9 +50,9 @@ function Footer() {
                 <a href='https://twitter.com/easybus' className='text-white me-3'><MDBIcon fab icon="twitter" /></a>
                 <a href='https://instagram.com/easybus' className='text-white'><MDBIcon fab icon="instagram" /></a>
               </div>
-              <p className='mt-3'><i style={{fontSize:"15px"}} class="fa-solid fa-location-dot"></i>   24, MG Road, Thampanoor, Trivandrum, Kerala</p>
-              <p><i style={{fontSize:"15px"}} class="fa-solid fa-phone"></i> +91 98765 43210</p>
-              <p><i style={{fontSize:"15px", marginRight:"5px"}} class="fa-solid fa-envelope"></i>support@easybus.com</p>
+              <p className='mt-3'><i style={{fontSize:"15px"}} class="fa-solid fa-location-dot"></i>   AR Buildings, MG Road, Thampanoor, Trivandrum, Kerala</p>
+              <p><i style={{fontSize:"15px"}} class="fa-solid fa-phone"></i> +91 99665 44210</p>
+              <p><i style={{fontSize:"15px", marginRight:"5px"}} class="fa-solid fa-envelope"></i>easybus@gmail.com</p>
             </MDBCol>
           </MDBRow>
         </section>

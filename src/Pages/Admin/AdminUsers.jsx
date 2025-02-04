@@ -124,7 +124,7 @@ function AdminUsers() {
       <Table 
         columns={columns} 
         dataSource={users} 
-        pagination={{ pageSize: 7 }} // Enables pagination with 7 users per page
+        pagination={{ pageSize: 6 }} // Enables pagination with 7 users per page
         className='mt-3'
       />
     </>
