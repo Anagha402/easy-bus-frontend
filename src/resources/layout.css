@@ -57,3 +57,52 @@ i{
     font-size: 25px;
     
 }
+/* ticket layout */
+.ticket-pdf {
+    width: 400px;
+    padding: 20px;
+    
+    background: #fff;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.ticket-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    
+}
+
+.route {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.ticket-info {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.seats {
+    font-size: 20px;
+    font-weight: bold;
+    color: #d9534f;
+}
+
+.ticket-amount {
+    font-size: 24px;
+    font-weight: bold;
+    color: #28a745;
+    margin-top: 10px;
+}
+
+.ticket-footer {
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #6c757d;
+}
+

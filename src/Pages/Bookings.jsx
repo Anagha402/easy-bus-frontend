@@ -7,6 +7,7 @@ import api from "../services/commonAPI";
 import moment from "moment";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import "../resources/layout.css"
 
 function Bookings() {
   const dispatch = useDispatch();
@@ -40,23 +41,40 @@ function Bookings() {
 
   const downloadTicketAsPDF = async () => {
     if (ticketRef.current) {
-      const canvas = await html2canvas(ticketRef.current); // Capture ticket content as an image
-      const image = canvas.toDataURL("image/png");
+        // Clone the ticket div instead of modifying the original
+        const ticketClone = ticketRef.current.cloneNode(true);
+        ticketClone.classList.add("ticket-pdf");
 
-      // Create a PDF
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "px",
-        format: "a4",
-      });
+        // Append the cloned ticket to the body (off-screen)
+        document.body.appendChild(ticketClone);
+        ticketClone.style.position = "absolute";
+        ticketClone.style.left = "-9999px"; // Hide from view
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        // Generate canvas from cloned element
+        const canvas = await html2canvas(ticketClone, {
+            scale: 2, // High resolution
+            useCORS: true,
+        });
 
-      pdf.addImage(image, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Ticket_${selectedBooking.name}.pdf`);
+        const image = canvas.toDataURL("image/png");
+        const pdf = new jsPDF({
+            orientation: "portrait",
+            unit: "px",
+            format: "a4",
+        });
+
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        pdf.addImage(image, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`Ticket_${selectedBooking.name}.pdf`);
+
+        // Remove the cloned element after generating the PDF
+        document.body.removeChild(ticketClone);
     }
-  };
+};
+
+
 
   const columns = [
     {
@@ -137,46 +155,44 @@ function Bookings() {
 
 {showPrintModal && (
     <Modal
-        title="EasyBus Ticket"
-        onCancel={() => {
-            setShowPrintModal(false);
-            setSelectedBooking(null);
-        }}
-        open={showPrintModal}
-        footer={null}
+    title="EasyBus Ticket"
+    onCancel={() => {
+        setShowPrintModal(false);
+        setSelectedBooking(null);
+    }}
+    open={showPrintModal}
+    footer={null}
+>
+    <div ref={ticketRef} className="ticket-pdf"> 
+        <h1 className="ticket-title">{selectedBooking.name}</h1>
+        <h2 className="route">
+            {selectedBooking.from} ➝ {selectedBooking.to}
+        </h2>
+        <hr />
+        <p className="ticket-info">
+            <strong>Date:</strong> {moment(selectedBooking.journeyDate).format("DD-MM-YYYY")}
+        </p>
+        <p className="ticket-info"><strong>Departure:</strong> {selectedBooking.departure}</p>
+        <p className="ticket-info"><strong>Arrival:</strong> {selectedBooking.arrival}</p>
+        <hr />
+        <p className="ticket-info">
+            <strong>Seat Numbers:</strong> <span className="seats">{selectedBooking.seats.join(", ")}</span>
+        </p>
+        <hr />
+        <p className="ticket-amount">
+            <strong>Amount Paid:</strong> ₹{selectedBooking.totalAmount}
+        </p>
+        <p className="ticket-footer">Happy Journey! Safe Travels! 🚍</p>
+    </div>
+    <button
+        className="btn btn-success mt-3"
+        onClick={downloadTicketAsPDF}
+        style={{ width: "100%" }}
     >
-        <div ref={ticketRef} className="d-flex flex-column">
-            <h1 className="text-lg mb-2">{selectedBooking.name}</h1>
-            <h1 className="text-md mb-3">
-                {selectedBooking.from} - {selectedBooking.to}
-            </h1>
-            <hr />
-            <p className="text-md mb-2">
-                Date : {moment(selectedBooking.journeyDate).format("DD-MM-YY")}
-            </p>
-            <p className="text-md mb-2">Departure Time : {selectedBooking.departure}</p>
-            <p className="text-md mb-2">Arrival Time : {selectedBooking.arrival}</p>
-            <hr />
-            <p className="text-md mb-2">
-                Seat Numbers : <br />
-                <span style={{ fontSize: "25px" }}>{selectedBooking.seats.join(", ")}</span>
-            </p>
-            <hr />
-            <p style={{ fontSize: "20px" }}>
-                Amount : <br />
-                <span style={{ fontSize: "40px" }}>
-                    &#8377;{selectedBooking.totalAmount}
-                </span>
-            </p>
-        </div>
-        <button
-            className="btn btn-success mt-3"
-            onClick={downloadTicketAsPDF}
-            style={{ width: "100%" }}
-        >
-            Download Ticket as PDF
-        </button>
-    </Modal>
+        Download Ticket as PDF
+    </button>
+</Modal>
+
 )}
 
     </>

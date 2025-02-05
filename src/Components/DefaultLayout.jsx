@@ -15,18 +15,19 @@ function DefaultLayout({children}) {
     const userMenu=[
         {
             name:"Home",
-            icon:<i class="fa-solid fa-house"></i>,
+            icon:<i className="fa-solid fa-house"></i>,
             path:"/"
         },
         {
             name:"Bookings",
-            icon:<i class="fa-solid fa-book"></i>,
+            icon:<i className="fa-solid fa-book"></i>,
             path:"/bookings"
         },
         
+        
         {
             name:"Logout",
-            icon:<i class="fa-solid fa-right-from-bracket"></i>,
+            icon:<i className="fa-solid fa-right-from-bracket"></i>,
             path:"/logout"
         }
     ]
@@ -34,37 +35,38 @@ function DefaultLayout({children}) {
         {
             name:'Home',
             path:'/',
-            icon:<i class="fa-solid fa-house"></i>
+            icon:<i className="fa-solid fa-house"></i>
         },
         {
             name:'Buses ',
             path:'/admin/buses',
-            icon:<i class="fa-solid fa-bus"></i>
+            icon:<i className="fa-solid fa-bus"></i>
         },
         {
             name:'Users',
             path:'/admin/users',
-            icon:<i class="fa-solid fa-user"></i>
+            icon:<i className="fa-solid fa-user"></i>
         },
         {
             name:'Passengers',
             path:'/admin/passengers',
-            icon:<i class="fa-solid fa-users-rectangle"></i>
+            icon:<i className="fa-solid fa-users-rectangle"></i>
         },
         {
             name:'Bookings',
             path:'/admin/bookings',
-            icon:<i class="fa-solid fa-list"></i>
+            icon:<i className="fa-solid fa-list"></i>
         },
         {
             name:'Dashboard',
             path:'/admin/dashboard',
-            icon:<i class="fa-solid fa-chart-line"></i>
+            icon:<i className="fa-solid fa-chart-line"></i>
         },
+        
         {
             name:'Logout',
             path:'/logout',
-            icon:<i class="fa-solid fa-right-from-bracket"></i>
+            icon:<i className="fa-solid fa-right-from-bracket"></i>
         }
     ]
     const menuToBeRendered=user?.isAdmin? adminMenu:userMenu;
@@ -76,47 +78,46 @@ function DefaultLayout({children}) {
     }
   return (
     <>
-    <div className="header text-light d-flex">
+    <div className="header text-light d-flex ">
             {collapsed? <i onClick={()=>setCollapsed(!collapsed)} class="fa-solid fa-bars p-3"></i>: <i onClick={()=>setCollapsed(!collapsed)} class="fa-solid fa-bars p-3"></i>}
            <h1 onClick={()=> navigate("/")} style={{cursor:"pointer"}} className='mt-2'>EasyBus</h1>
             
              <h3 className='role mt-3' style={{marginLeft:"400px"}}>Welcome {user?.name}  <span style={{fontSize:"18px",marginLeft:"70px"}}>Role:  {user?.isAdmin?'Admin':'User'}  </span> </h3>
-        </div>
+    </div>
 <div className="layout-parent">
 
     <div className="sidebar text-light">
         <div className='d-flex flex-column gap-3 justify-content-start mt-5'>
-            {menuToBeRendered.map((item,index)=>{
-                return <div  className={`${activeRoute === item.path ? 'active-menu-item' : ''} menu-item`}>
-                    <i>{item.icon}</i>
-                   {!collapsed &&  <span onClick={()=>{ if(item.path==='/logout'){
-
-Swal.fire({
-    title: "Are you sure you want to logout?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, logout!"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      sessionStorage.removeItem("token");
-      navigate("/login");
-    }
-  });
-  
-                    //alert("Are you sure you want to logout")
-                    //sessionStorage.removeItem("token")
-                    //navigate("/login")
-                   }else{
-                    navigate(item.path)
-
-                   }}}>{item.name}</span>
+        {menuToBeRendered.map((item, index) => {
+    return (
+        <div key={index} className={`${activeRoute === item.path ? 'active-menu-item' : ''} menu-item`}>
+            <i>{item.icon}</i>
+            {!collapsed && <span onClick={() => { 
+                if (item.path === '/logout') {
+                    Swal.fire({
+                        title: "Are you sure you want to logout?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, logout!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            sessionStorage.removeItem("token");
+                            navigate("/login");
+                        }
+                    });
+                } else {
+                    navigate(item.path);
                 }
-                </div>
+            }}>
+                {item.name}
+            </span>}
+        </div>
+    );
+})}
 
-            })}
         </div>
 
     </div>

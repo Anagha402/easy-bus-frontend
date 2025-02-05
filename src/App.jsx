@@ -19,6 +19,8 @@ import AdminDashboard from './Pages/Admin/AdminDashboard'
 import AdminBookings from './Pages/Admin/AdminBookings'
 import OtpVerification from './Pages/OtpVerification'
 import AdminPassengers from './Pages/Admin/AdminPassengers'
+import UserChat from './Pages/UserChat'
+import AdminChat from './Pages/Admin/AdminChat'
 
 
 function App() {
@@ -42,6 +44,8 @@ function App() {
         <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard/></ProtectedRoute>}/>
         <Route path="/admin/bookings" element={<ProtectedRoute><AdminBookings/></ProtectedRoute>}/>
         <Route path="/admin/passengers" element={<ProtectedRoute><AdminPassengers/></ProtectedRoute>}/>
+        
+        
         
       </Routes>
     </>
