@@ -46,9 +46,9 @@ function Footer() {
             <MDBCol lg='3' md='6' className='mb-4 mb-md-0'>
               <h5 className='text-uppercase'>Follow Us</h5>
               <div>
-                <a href='https://facebook.com/easybus' className='text-white me-3'><MDBIcon fab icon="facebook-f" /></a>
-                <a href='https://twitter.com/easybus' className='text-white me-3'><MDBIcon fab icon="twitter" /></a>
-                <a href='https://instagram.com/easybus' className='text-white'><MDBIcon fab icon="instagram" /></a>
+                <a href='https://facebook.com/easybus' target="_blank" className='text-white me-3'><MDBIcon fab icon="facebook-f" /></a>
+                <a href='https://twitter.com/easybus'target="_blank" className='text-white me-3'><MDBIcon fab icon="twitter" /></a>
+                <a href='https://instagram.com/easybus'target="_blank" className='text-white'><MDBIcon fab icon="instagram" /></a>
               </div>
               <p className='mt-3'><i style={{fontSize:"15px"}} class="fa-solid fa-location-dot"></i>   AR Buildings, MG Road, Thampanoor, Trivandrum, Kerala</p>
               <p><i style={{fontSize:"15px"}} class="fa-solid fa-phone"></i> +91 99665 44210</p>

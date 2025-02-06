@@ -19,8 +19,8 @@ import AdminDashboard from './Pages/Admin/AdminDashboard'
 import AdminBookings from './Pages/Admin/AdminBookings'
 import OtpVerification from './Pages/OtpVerification'
 import AdminPassengers from './Pages/Admin/AdminPassengers'
-import UserChat from './Pages/UserChat'
-import AdminChat from './Pages/Admin/AdminChat'
+
+
 
 
 function App() {

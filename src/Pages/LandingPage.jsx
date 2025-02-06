@@ -140,7 +140,7 @@ function LandingPage() {
             busesToDisplay
               .filter((bus) => bus.status === 'Yet To Start')
               .map((bus) => (
-                <Col lg={8} xs={24} sm={24} className="p-1" key={bus._id}>
+                <Col lg={8} xs={4} sm={6} className="p-1" key={bus._id}>
                   <Bus bus={bus} />
                 </Col>
               ))

@@ -80,3 +80,8 @@
     pointer-events: none !important;
     cursor: disabled !important;
 }
+.female-reserved-seat {
+    background-color: pink !important;
+    color: black;
+    
+}

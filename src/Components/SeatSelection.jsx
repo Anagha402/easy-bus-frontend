@@ -8,7 +8,7 @@ function SeatSelection({ selectedSeats, setSelectedSeats, bus }) {
 
     const selectOrUnSelectSeats = (seatNumber) => {
         if (selectedSeats.includes(seatNumber)) {
-            setSelectedSeats(selectedSeats.filter((seat) => seat !== seatNumber));
+            setSelectedSeats(selectedSeats.filter(seat => seat !== seatNumber));
         } else {
             setSelectedSeats([...selectedSeats, seatNumber]);
         }
@@ -23,9 +23,8 @@ function SeatSelection({ selectedSeats, setSelectedSeats, bus }) {
                 const startSeatNumber = row * 4 + 1;
 
                 return (
-                    <Row key={row} className="bus-row ">
-                        {/* Seats 1 and 2 */}
-                        <Col span={11} className="seat-col ">
+                    <Row key={row} className="bus-row">
+                        <Col span={11} className="seat-col">
                             {Array.from([0, 1]).map((seatIndex) => {
                                 const seatNumber = startSeatNumber + seatIndex;
                                 if (seatNumber > capacity) return null;
@@ -35,23 +34,18 @@ function SeatSelection({ selectedSeats, setSelectedSeats, bus }) {
                                     seatClass = "selected-seat";
                                 } else if (bus.seatsBooked.includes(seatNumber)) {
                                     seatClass = "booked-seat";
+                                } else if (bus.femaleReservedSeats.includes(seatNumber)) {
+                                    seatClass = "female-reserved-seat";
                                 }
 
                                 return (
-                                    <div
-                                        key={seatNumber}
-                                        className={`seat ${seatClass}`}
-                                        onClick={() => selectOrUnSelectSeats(seatNumber)}
-                                    >
+                                    <div key={seatNumber} className={`seat ${seatClass}`} onClick={() => selectOrUnSelectSeats(seatNumber)}>
                                         {seatNumber}
                                     </div>
                                 );
                             })}
                         </Col>
                         <Col span={2}></Col>
-                        
-
-                        {/* Seats 3 and 4 */}
                         <Col span={11} className="seat-col">
                             {Array.from([2, 3]).map((seatIndex) => {
                                 const seatNumber = startSeatNumber + seatIndex;
@@ -62,14 +56,12 @@ function SeatSelection({ selectedSeats, setSelectedSeats, bus }) {
                                     seatClass = "selected-seat";
                                 } else if (bus.seatsBooked.includes(seatNumber)) {
                                     seatClass = "booked-seat";
+                                } else if (bus.femaleReservedSeats.includes(seatNumber)) {
+                                    seatClass = "female-reserved-seat";
                                 }
 
                                 return (
-                                    <div
-                                        key={seatNumber}
-                                        className={`seat ${seatClass}`}
-                                        onClick={() => selectOrUnSelectSeats(seatNumber)}
-                                    >
+                                    <div key={seatNumber} className={`seat ${seatClass}`} onClick={() => selectOrUnSelectSeats(seatNumber)}>
                                         {seatNumber}
                                     </div>
                                 );

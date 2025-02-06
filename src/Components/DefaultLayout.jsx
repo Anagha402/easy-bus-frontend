@@ -78,49 +78,73 @@ function DefaultLayout({children}) {
     }
   return (
     <>
-    <div className="header text-light d-flex ">
-            {collapsed? <i onClick={()=>setCollapsed(!collapsed)} class="fa-solid fa-bars p-3"></i>: <i onClick={()=>setCollapsed(!collapsed)} class="fa-solid fa-bars p-3"></i>}
-           <h1 onClick={()=> navigate("/")} style={{cursor:"pointer"}} className='mt-2'>EasyBus</h1>
-            
-             <h3 className='role mt-3' style={{marginLeft:"400px"}}>Welcome {user?.name}  <span style={{fontSize:"18px",marginLeft:"70px"}}>Role:  {user?.isAdmin?'Admin':'User'}  </span> </h3>
-    </div>
+    {/* header */}
+    <div className="header text-light d-flex align-items-center justify-content-between p-3">
+  <div className="d-flex align-items-center">
+    <i
+      onClick={() => setCollapsed(!collapsed)}
+      className="fa-solid fa-bars p-2 fs-4"
+    ></i>
+    <h1
+      onClick={() => navigate("/")}
+      style={{ cursor: "pointer" }}
+      className="MS-2 fs-3"
+    >
+      EasyBus
+    </h1>
+  </div>
+
+  <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center ms-3">
+    <h6 className="mb-1 text-truncate" style={{ maxWidth: "200px" }}>
+      Welcome {user?.name} 
+    </h6>
+    <span className="fs-6 ms-md-2">Role: {user?.isAdmin ? "Admin" : "User"}</span>
+  </div>
+</div>
+
+
+
+
+
 <div className="layout-parent">
+    {/* sidebar */}
 
     <div className="sidebar text-light">
-        <div className='d-flex flex-column gap-3 justify-content-start mt-5'>
-        {menuToBeRendered.map((item, index) => {
-    return (
-        <div key={index} className={`${activeRoute === item.path ? 'active-menu-item' : ''} menu-item`}>
-            <i>{item.icon}</i>
-            {!collapsed && <span onClick={() => { 
-                if (item.path === '/logout') {
-                    Swal.fire({
-                        title: "Are you sure you want to logout?",
-                        text: "You won't be able to revert this!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes, logout!"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            sessionStorage.removeItem("token");
-                            navigate("/login");
-                        }
-                    });
-                } else {
-                    navigate(item.path);
-                }
-            }}>
-                {item.name}
-            </span>}
+            <div className='d-flex flex-column gap-3 justify-content-start mt-5'>
+            {menuToBeRendered.map((item, index) => {
+        return (
+            <div key={index} className={`${activeRoute === item.path ? 'active-menu-item' : ''} menu-item`}>
+                <i>{item.icon}</i>
+                {!collapsed && <span onClick={() => { 
+                    if (item.path === '/logout') {
+                        Swal.fire({
+                            title: "Are you sure you want to logout?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, logout!"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                sessionStorage.removeItem("token");
+                                navigate("/login");
+                            }
+                        });
+                    } else {
+                        navigate(item.path);
+                    }
+                }}>
+                    {item.name}
+                </span>}
+            </div>
+        );
+    })}
+    
+            </div>
+    
         </div>
-    );
-})}
-
-        </div>
-
-    </div>
+    
 
     <div className="body ">
         

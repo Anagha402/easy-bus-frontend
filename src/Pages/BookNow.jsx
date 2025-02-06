@@ -20,8 +20,8 @@ function BookNow() {
     const [isModalVisible, setIsModalVisible] = useState(false);  // State for modal visibility
     const [passengerDetails, setPassengerDetails] = useState([]);  // Store passenger details
     const [isFormValid, setIsFormValid] = useState(false);  // Check if form is fully filled
-
     const [isRoutesModalVisible, setIsRoutesModalVisible] = useState(false);
+
     const showRoutesModal = async() => {
         await getBus(); // Fetch the latest data before showing the modal
         setIsRoutesModalVisible(true);
@@ -71,15 +71,54 @@ function BookNow() {
     const handlePassengerDetailsChange = (e, index) => {
         const { name, value } = e.target;
         const updatedPassengers = [...passengerDetails];
+    
+        // If the seat is female-reserved, don't allow changing the gender
+        if (name === "gender" && bus.femaleReservedSeats.includes(selectedSeats[index])) {
+            value = "Female"; // Force gender to Female for female-reserved seats
+        }
+    
         updatedPassengers[index] = { ...updatedPassengers[index], [name]: value };
         setPassengerDetails(updatedPassengers);
-        validateForm(updatedPassengers);
+        validateForm(updatedPassengers);  // Call validateForm after updating
     };
-
+    
+    
+    
+    
     const validateForm = (details) => {
-        const isValid = details.every(detail => detail.name && detail.age && detail.gender);
-        setIsFormValid(isValid);
+        // Ensure all passengers have filled details and gender validation is met
+        const isValid = details.every((detail, index) => {
+            const isDetailFilled = detail.name && detail.age && detail.gender;
+        
+            // Ensure gender for reserved seats is Female
+            const isGenderValid = bus.femaleReservedSeats.includes(selectedSeats[index])
+                ? detail.gender === "Female"
+                : true; // No gender validation if not a female-reserved seat
+        
+            return isDetailFilled && isGenderValid;
+        });
+        
+        setIsFormValid(isValid);  // Update form validity
     };
+    useEffect(() => {
+        // Initialize the passenger details array when the modal is shown
+        if (selectedSeats.length > 0) {
+            const newDetails = selectedSeats.map((seat) => {
+                const gender = bus.femaleReservedSeats.includes(seat) ? "Female" : "";
+                return {
+                    name: "",
+                    age: "",
+                    gender: gender, // Set gender to Female for female-reserved seats
+                };
+            });
+            setPassengerDetails(newDetails);
+        }
+    }, [selectedSeats, bus]); // Add bus as a dependency to ensure it updates when bus data is fetched
+    
+    
+    
+    
+    
 
     const showPassengerDetailsModal = () => {
         setIsModalVisible(true);
@@ -201,7 +240,7 @@ function BookNow() {
                         open={isModalVisible}
                         onOk={handleOk}
                         onCancel={handleCancel}
-                        footer={[
+                        footer={[ 
                             <Button key="cancel" onClick={handleCancel}>
                                 Cancel
                             </Button>,
@@ -215,7 +254,7 @@ function BookNow() {
                             </Button>,
                         ]}
                     >
-                        <Form >
+                        <Form>
                             {Array.from({ length: selectedSeats.length }).map((_, index) => (
                                 <div key={index} className="passenger-form ">
                                     <h3>Seat No: {selectedSeats[index]}</h3>
@@ -244,19 +283,24 @@ function BookNow() {
                                             style={{ width:'150px'}}
                                         >
                                             <Select.Option value="Male">Male</Select.Option>
-                                            <Select.Option value="Female">Female</Select.Option>
+                                            <Select.Option value="Female" >Female</Select.Option>
                                             <Select.Option value="Other">Other</Select.Option>
                                         </Select>
                                     </Form.Item>
+                                    {/* Show this message if it's a female-reserved seat */}
+                                    {bus.femaleReservedSeats.includes(selectedSeats[index]) && (
+                                        <p style={{ color: "red", fontWeight: "bold" }}>
+                                            This seat is reserved for females only.
+                                        </p>
+                                    )}
                                 </div>
                             ))}
                         </Form>
                     </Modal>
 
-                    {/* seat availability */}
-                    
+                    {/* seat availability */}    
                     <Col lg={5} style={{ marginTop: "90px" }}>
-                    <h3>Seat Legend</h3>
+                        <h3>Seat Legend</h3>
                         <div className="d-flex align-items-center">
                             <div style={{ width: "15px", height: "15px", backgroundColor: "white" }} className="mx-1 m-1 border border-dark"></div> 
                             : Available Seats
@@ -276,32 +320,37 @@ function BookNow() {
                             : Booked Seats
                         </div>
 
-
+                        <div className="d-flex align-items-center">
+                            <div
+                                style={{ width: "15px", height: "15px", backgroundColor: "pink" }}
+                                className="mx-1 m-1"
+                            ></div> 
+                            : Female  Reserved Seats
+                        </div>
 
                         <button className="btn btn-info mt-3" onClick={showRoutesModal}>
-    View Bus Route
-</button>
-<Modal
-    title="Bus Routes"
-    open={isRoutesModalVisible}
-    onCancel={handleRoutesModalClose}
-    footer={[
-        <Button key="close" onClick={handleRoutesModalClose}>
-            Close
-        </Button>
-    ]}
->
-    {bus?.routes && Array.isArray(bus.routes) && bus.routes.length > 0 ? (
-        <ul>
-            {bus.routes.map((route, index) => (
-                <li key={index}>{route}</li>
-            ))}
-        </ul>
-    ) : (
-        <p>No routes available for this bus.</p>
-    )}
-</Modal>
-
+                            View Bus Route
+                        </button>
+                        <Modal
+                            title="Bus Routes"
+                            open={isRoutesModalVisible}
+                            onCancel={handleRoutesModalClose}
+                            footer={[
+                                <Button key="close" onClick={handleRoutesModalClose}>
+                                    Close
+                                </Button>
+                            ]}
+                        >
+                            {bus?.routes && Array.isArray(bus.routes) && bus.routes.length > 0 ? (
+                                <ul>
+                                    {bus.routes.map((route, index) => (
+                                        <li key={index}>{route}</li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No routes available for this bus.</p>
+                            )}
+                        </Modal>
                     </Col>
                 </Row>
             )}
