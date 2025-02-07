@@ -123,7 +123,7 @@ function AdminUsers() {
 
       <Table 
         columns={columns} 
-        dataSource={users} 
+        dataSource={users.map((user) => ({ ...user, key: user._id }))} // Ensure unique keys
         pagination={{ pageSize: 6 }} // Enables pagination with 7 users per page
         className='mt-3'
       />

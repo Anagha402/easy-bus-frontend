@@ -119,7 +119,7 @@ function AdminBuses() {
       {/* Table with pagination */}
       <Table
         columns={columns}
-        dataSource={buses}
+        dataSource={buses.map((bus) => ({ ...bus, key: bus._id }))} // Ensure each row has a unique key
         pagination={{ pageSize: 8}} // Display 9 buses per page
       />
 

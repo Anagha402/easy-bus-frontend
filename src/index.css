@@ -9,9 +9,9 @@ body{
   overflow-x: hidden;
 }
 /* landing page */
-.place:hover{
+/* .place:hover{
   scale: 1.05;
-}
+} */
 #head{
   background-color:rgb(190, 9, 69);
 }
