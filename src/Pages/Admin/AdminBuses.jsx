@@ -106,7 +106,7 @@ function AdminBuses() {
   return (
     <>
       <div className="d-flex justify-content-between mb-3">
-        <PageTitle title="Buses" />
+      <PageTitle title="Buses"/>
         <button
           onClick={() => setShowBusForm(true)}
           className="btn btn-primary"
@@ -118,6 +118,7 @@ function AdminBuses() {
 
       {/* Table with pagination */}
       <Table
+      className="border shadow-lg"
         columns={columns}
         dataSource={buses.map((bus) => ({ ...bus, key: bus._id }))} // Ensure each row has a unique key
         pagination={{ pageSize: 8}} // Display 9 buses per page

@@ -84,8 +84,9 @@ const AdminBookings = () => {
       <h2 style={{ marginBottom: '20px', fontWeight: 'bold' }}>Admin Bookings</h2>
 
       {/* Bookings Table */}
-      <Card>
+      
         <Table
+        className='border shadow-lg'
           columns={columns}
           dataSource={paginatedData}
           rowKey="_id"
@@ -95,9 +96,9 @@ const AdminBookings = () => {
             total: bookings.length,
             onChange: (page) => setCurrentPage(page),
           }}
-          bordered
+          
         />
-      </Card>
+      
     </div>
   );
 };

@@ -39,9 +39,9 @@ function Login() {
         className="h-screen d-flex justify-content-center align-items-center"
         style={{ backgroundColor: 'rgba(165, 18, 70, 0.37)' }}
       >
-        <div className="w-400 card">
-          <Form layout="vertical" className="border p-5" onFinish={onFinish}>
-            <h4 className="mb-4">Easy Bus - Login</h4>
+        <div className="w-400 card border rounded " >
+          <Form layout="vertical" className="  p-5" onFinish={onFinish}>
+            <h4 className="mb-4 " style={{color:"rgb(165, 18, 69)"}}>Easy Bus - Login</h4>
             <hr />
 
             {/* Email Input with Required Validation */}
@@ -87,6 +87,8 @@ function Login() {
             </div>
           </Form>
         </div>
+
+
       </div>
 
       <ToastContainer position="top-center" autoClose={2000} theme="colored" />

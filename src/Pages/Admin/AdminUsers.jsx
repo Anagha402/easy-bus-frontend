@@ -118,14 +118,14 @@ function AdminUsers() {
   return (
     <>
       <div className="d-flex justify-content-between">
-        <PageTitle title="Users" />
+      <PageTitle title="Users"/>
       </div>
 
       <Table 
         columns={columns} 
         dataSource={users.map((user) => ({ ...user, key: user._id }))} // Ensure unique keys
         pagination={{ pageSize: 6 }} // Enables pagination with 7 users per page
-        className='mt-3'
+        className='mt-3 border shadow-lg'
       />
     </>
   )

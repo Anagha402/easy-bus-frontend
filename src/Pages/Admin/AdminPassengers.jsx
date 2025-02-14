@@ -93,7 +93,7 @@ const AdminPassengers = () => {
 
   return (
     <>
-    <h1 className="fw-bolder">Passenger Details</h1>
+    <h2 style={{ marginBottom: '20px', fontWeight: 'bold' }}>Passenger Details</h2>
     <div
       style={{
         display: "flex",
@@ -205,6 +205,7 @@ const AdminPassengers = () => {
           <div>
             <h2>Passenger Details for Bus Number: {busNumber}</h2>
             <Table
+            className="border shadow-lg"
               columns={columns}
               dataSource={passengerDetails}
               pagination={{
