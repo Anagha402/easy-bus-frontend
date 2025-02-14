@@ -7,7 +7,7 @@ function PublicRoute({children}) {
     if(sessionStorage.getItem('token')){
       navigate('/')
     }
-  },[])
+  },[navigate])
   return (
     <>
     <div>

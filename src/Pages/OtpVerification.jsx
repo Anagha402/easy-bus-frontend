@@ -59,9 +59,9 @@ function OtpVerification() {
                             maxLength="1"
                             className="form-control text-center"
                             style={{
-                                width: "60px",  // **Increased width**
-                                height: "60px", // **Better height for visibility**
-                                fontSize: "24px", // **Bigger font size**
+                                width: "60px",  
+                                height: "60px", 
+                                fontSize: "24px", 
                                 fontWeight: "bold",
                                 textAlign: "center"
                             }}

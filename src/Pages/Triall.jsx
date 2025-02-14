@@ -1,97 +1,130 @@
-import React, { useState } from 'react';
-import { Form, message } from 'antd';
-import { Link } from 'react-router-dom';
-import api from '../services/commonAPI';
-import { ToastContainer, toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
-import { ShowLoading, HideLoading } from '../Redux/alertSlice';
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from "react";
+import { Table, Button } from "react-bootstrap";
+import PageTitle from "../../Components/PageTitle";
+import BusForm from "../../Components/BusForm";
+import { useDispatch } from "react-redux";
+import { HideLoading, ShowLoading } from "../../Redux/alertSlice";
+import { message } from "antd";
+import api from "../../services/commonAPI";
 
-function Login() {
+function AdminBuses() {
   const dispatch = useDispatch();
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [showBusForm, setShowBusForm] = useState(false);
+  const [buses, setBuses] = useState([]);
+  const [selectedBus, setSelectedBus] = useState(null);
 
-  const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
-
-  const onFinish = async (values) => {
-    console.log(values);
+  // Get all buses
+  const getBuses = async () => {
     try {
       dispatch(ShowLoading());
-      const response = await api.post('/api/users/login', values);
+      const response = await api.post("/api/buses/get-all-buses", {});
       dispatch(HideLoading());
 
       if (response.data.success) {
-        message.success('Logged in successfully');
-        sessionStorage.setItem('token', response.data.data);
-        window.location.href = '/';
+        setBuses(response.data.data);
       } else {
-        toast.warning(response.data.message);
+        message.error(response.data.message);
       }
     } catch (error) {
       dispatch(HideLoading());
-      toast.warning(error.message);
+      message.error(error.message);
     }
   };
 
+  // Delete bus
+  const deleteBus = async (id) => {
+    try {
+      dispatch(ShowLoading());
+      const response = await api.post("/api/buses/delete-bus", { _id: id });
+      dispatch(HideLoading());
+
+      if (response.data.success) {
+        message.success(response.data.message);
+        getBuses();
+      } else {
+        message.error(response.data.message);
+      }
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error(error.message);
+    }
+  };
+
+  // Fetch buses on component mount
+  useEffect(() => {
+    getBuses();
+  }, []);
+
   return (
     <>
-      <div
-        className="h-screen d-flex justify-content-center align-items-center"
-        style={{ backgroundColor: 'rgba(165, 18, 70, 0.37)' }}
-      >
-        <div className="w-400 card">
-          <Form layout="vertical" className="border p-5" onFinish={onFinish}>
-            <h4 className="mb-4">Easy Bus - Login</h4>
-            <hr />
-
-            {/* Email Input with Required Validation */}
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[{ required: true, message: 'Email is required' }]}
-            >
-              <input className="form-control" type="email" />
-            </Form.Item>
-
-            {/* Password Input with Toggle Visibility */}
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[{ required: true, message: 'Password is required' }]}
-            >
-              <div className="input-group">
-                <input
-                  className="form-control"
-                  type={passwordVisible ? 'text' : 'password'}
-                />
-                <span
-                  className="input-group-text"
-                  onClick={togglePasswordVisibility}
-                  style={{ cursor: 'pointer' }}
-                >
-                  {passwordVisible ? <EyeInvisibleOutlined /> : <EyeOutlined />}
-                </span>
-              </div>
-            </Form.Item>
-
-            <div className="d-flex justify-content-between">
-              <p className="mt-3">
-                Click here to{' '}
-                <Link to={'/register'} className="text-decoration-none text-success">
-                  Register
-                </Link>
-              </p>
-              <button className="btn btn-primary m-3" type="submit">
-                Login
+       <div className="d-flex justify-content-between mb-3">
+              <PageTitle title="Buses" />
+              <button
+                onClick={() => setShowBusForm(true)}
+                className="btn btn-primary"
+                style={{ marginLeft: "1100px" }}
+              >
+                Add Bus
               </button>
-            </div>
-          </Form>
-        </div>
       </div>
 
-      <ToastContainer position="top-center" autoClose={2000} theme="colored" />
+      {/* Responsive Bootstrap Table */}
+      <div className="table-responsive">
+        <Table striped bordered hover>
+          <thead className="table-dark">
+            <tr>
+              <th>Name</th>
+              <th>Number</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Journey Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {buses.map((bus) => (
+              <tr key={bus._id}>
+                <td>{bus.name}</td>
+                <td>{bus.number}</td>
+                <td>{bus.from}</td>
+                <td>{bus.to}</td>
+                <td>{bus.journeyDate}</td>
+                <td>{bus.status}</td>
+                <td className="d-flex gap-2">
+                  <i
+                    className="fa-solid fa-pencil text-primary"
+                    onClick={() => {
+                      setSelectedBus(bus);
+                      setShowBusForm(true);
+                    }}
+                    style={{ cursor: "pointer" }}
+                  ></i>
+                  <i
+                    className="fa-solid fa-trash text-danger"
+                    onClick={() => deleteBus(bus._id)}
+                    style={{ cursor: "pointer" }}
+                  ></i>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+
+      {/* Bus form modal */}
+      {showBusForm && (
+        <BusForm
+          showBusForm={showBusForm}
+          setShowBusForm={setShowBusForm}
+          type={selectedBus ? "edit" : "add"}
+          selectedBus={selectedBus}
+          getData={getBuses}
+          setSelectedBus={setSelectedBus}
+        />
+      )}
     </>
   );
 }
 
-export default Login;
+export default AdminBuses;

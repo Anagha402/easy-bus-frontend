@@ -23,13 +23,13 @@ function Register() {
         return;
       }
   
-      console.log("Submitting:", values); // Debugging line
+      console.log("Submitting:", values); 
   
       dispatch(ShowLoading());
       const response = await api.post("/api/users/register", values);
       dispatch(HideLoading());
   
-      console.log("Response:", response.data); // Debugging line
+      console.log("Response:", response.data); 
   
       if (response.data.success) {
         message.success(response.data.message);

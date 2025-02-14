@@ -111,7 +111,7 @@ const AdminPassengers = () => {
           display: "flex",
           flexDirection: "column",
           minWidth: "300px", // Ensures form doesn't shrink too small
-          height: "100%", // Ensures form doesn't shrink
+          height: "100%", 
         }}
       >
         <form onSubmit={handleSubmit}>
@@ -127,7 +127,7 @@ const AdminPassengers = () => {
                 width: "100%",
                 padding: "8px",
                 marginTop: "5px",
-                boxSizing: "border-box", // Prevents overflow
+                boxSizing: "border-box", 
               }}
             />
             {suggestions.length > 0 && (
